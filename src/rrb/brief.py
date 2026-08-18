@@ -125,6 +125,15 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
     ]
     if risk.drivers:
         for d in risk.drivers:
+            if d.key == "negative_sentiment" and sat.quotes:
+                # the sentiment quotes ARE the evidence for this driver
+                q = sat.quotes[0]
+                citations.append(Citation(doc_id=q.doc_id, title=q.title,
+                                          doc_date=q.doc_date, excerpt=q.text))
+                lines.append(
+                    f"- **{d.key}** — {d.detail}. "
+                    f"Evidence: “{q.text}” ({q.title}, {q.doc_date})")
+                continue
             if d.key in narrative_chunks:
                 c = narrative_chunks[d.key]
             else:
