@@ -51,9 +51,11 @@ def main(argv=None) -> None:
         if args.all:
             outdir = Path(args.out)
             outdir.mkdir(parents=True, exist_ok=True)
-            for acct_id in index.account_ids:
+            for i, acct_id in enumerate(index.account_ids, 1):
                 b = build_brief(conn, index, acct_id)
                 (outdir / f"{acct_id}.md").write_text(maybe_rewrite(b))
+                if i % 50 == 0:
+                    print(f"  {i}/{len(index.account_ids)}")
             print(f"wrote {len(index.account_ids)} briefs → {outdir}")
         else:
             if not args.account_id:

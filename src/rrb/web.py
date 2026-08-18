@@ -42,25 +42,32 @@ def create_app(db_path: str) -> FastAPI:
     @app.get("/", response_class=HTMLResponse)
     def dashboard(specialty: str = "", state: str = "", risk: str = ""):
         conn = connect(db_path)
-        q = "SELECT * FROM accounts WHERE 1=1"
-        params: list = []
-        if specialty:
-            q += " AND specialty=?"; params.append(specialty)
-        if state:
-            q += " AND state=?"; params.append(state)
-        rows = []
-        for a in conn.execute(q + " ORDER BY account_id", params).fetchall():
-            level, points, days = _risk(conn, a["account_id"])
-            if risk and level != risk:
-                continue
-            rows.append((days, level, points, a))
+        try:
+            q = "SELECT * FROM accounts WHERE 1=1"
+            params: list = []
+            if specialty:
+                q += " AND specialty=?"; params.append(specialty)
+            if state:
+                q += " AND state=?"; params.append(state)
+            rows = []
+            for a in conn.execute(q + " ORDER BY account_id",
+                                  params).fetchall():
+                level, points, days = _risk(conn, a["account_id"])
+                if risk and level != risk:
+                    continue
+                rows.append((days, level, points, a))
+        finally:
+            conn.close()
         rows.sort(key=lambda t: ({"high": 0, "medium": 1, "low": 2}[t[1]], t[0]))
+        esc = html.escape
         trs = "".join(
-            f"<tr><td><a href='/brief/{a['account_id']}'>{a['account_id']}</a>"
-            f"</td><td>{html.escape(a['name'])}</td>"
-            f"<td>{a['specialty']}</td><td>{a['city']}, {a['state']}</td>"
+            f"<tr><td><a href='/brief/{esc(a['account_id'])}'>"
+            f"{esc(a['account_id'])}</a>"
+            f"</td><td>{esc(a['name'])}</td>"
+            f"<td>{esc(a['specialty'])}</td>"
+            f"<td>{esc(a['city'])}, {esc(a['state'])}</td>"
             f"<td class='{level}'>{level} ({points})</td>"
-            f"<td>{a['contract_end']} ({days}d)</td></tr>"
+            f"<td>{esc(a['contract_end'])} ({days}d)</td></tr>"
             for days, level, points, a in rows)
         body = (f"<h1>Renewal Risk — {len(rows)} accounts</h1>"
                 "<p>Filter: ?specialty=dental · ?state=TX · ?risk=high</p>"
@@ -77,6 +84,8 @@ def create_app(db_path: str) -> FastAPI:
         except KeyError:
             return HTMLResponse(PAGE.format(body="<h1>Not found</h1>"),
                                 status_code=404)
+        finally:
+            conn.close()
         return PAGE.format(
             body=f"<p><a href='/'>← all accounts</a></p>"
                  f"<pre>{html.escape(b.markdown)}</pre>")
