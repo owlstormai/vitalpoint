@@ -22,12 +22,14 @@ border-bottom:1px solid #ddd;text-align:left}}
 
 def create_app(db_path: str) -> FastAPI:
     app = FastAPI()
-    conn = connect(db_path, check_same_thread=False)
-    conn2 = connect(db_path, check_same_thread=False)
-    index = HybridIndex(chunk_documents(conn2))
+    boot_conn = connect(db_path)
+    index = HybridIndex(chunk_documents(boot_conn))
+    boot_conn.close()
     _risk_cache: dict[str, tuple] = {}
 
-    def _risk(acct_id: str):
+    # sqlite connections are not safe for concurrent use across request
+    # threads — each request opens its own.
+    def _risk(conn, acct_id: str):
         if acct_id not in _risk_cache:
             sig = compute_signals(conn, acct_id)
             docs = conn.execute(
@@ -39,6 +41,7 @@ def create_app(db_path: str) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def dashboard(specialty: str = "", state: str = "", risk: str = ""):
+        conn = connect(db_path)
         q = "SELECT * FROM accounts WHERE 1=1"
         params: list = []
         if specialty:
@@ -46,8 +49,8 @@ def create_app(db_path: str) -> FastAPI:
         if state:
             q += " AND state=?"; params.append(state)
         rows = []
-        for a in conn.execute(q + " ORDER BY account_id", params):
-            level, points, days = _risk(a["account_id"])
+        for a in conn.execute(q + " ORDER BY account_id", params).fetchall():
+            level, points, days = _risk(conn, a["account_id"])
             if risk and level != risk:
                 continue
             rows.append((days, level, points, a))
@@ -68,6 +71,7 @@ def create_app(db_path: str) -> FastAPI:
 
     @app.get("/brief/{account_id}", response_class=HTMLResponse)
     def brief(account_id: str):
+        conn = connect(db_path)
         try:
             b = build_brief(conn, index, account_id)
         except KeyError:
