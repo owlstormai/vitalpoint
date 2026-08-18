@@ -60,27 +60,35 @@ class AccountScope:
         self._chunks = chunks
         self._bm25 = _BM25([_tokens(c.text) for c in chunks])
         self._vec = TfidfVectorizer()
-        self._mat = self._vec.fit_transform([c.text for c in chunks])
+        try:
+            self._mat = self._vec.fit_transform([c.text for c in chunks])
+        except ValueError:
+            # sklearn raises when the chunk set has an empty vocabulary
+            # (e.g. a single chunk like "N/A" with no usable tokens). Degrade
+            # to BM25-only scoring for this scope rather than crashing.
+            self._mat = None
 
     def retrieve(self, query: str, k: int = 5) -> list[Retrieved]:
         if not self._chunks:
             return []
         bm = self._bm25.scores(_tokens(query))
-        dense = cosine_similarity(
-            self._vec.transform([query]), self._mat)[0]
+        rankings = [bm]
+        if self._mat is not None:
+            dense = cosine_similarity(
+                self._vec.transform([query]), self._mat)[0]
+            rankings.append(dense)
         rrf: defaultdict[int, float] = defaultdict(float)
-        for ranking in (bm, dense):
+        for ranking in rankings:
             order = sorted(range(len(self._chunks)),
                            key=lambda i: ranking[i], reverse=True)
             for rank, i in enumerate(order):
                 if ranking[i] > 0:
                     rrf[i] += 1.0 / (RRF_K + rank + 1)
         if not rrf:
-            # No lexical or semantic overlap at all (e.g. a query whose terms
-            # don't appear anywhere in this account's small chunk set). Fall
-            # back to the account's own chunks in stored order rather than an
-            # empty result — still scoped, just unranked.
-            return [Retrieved(c, 0.0) for c in self._chunks[:k]]
+            # No lexical or semantic overlap at all. Cite-or-abstain: return
+            # nothing rather than handing back unrelated chunks that
+            # downstream code might mistake for evidence.
+            return []
         top = sorted(rrf.items(), key=lambda kv: kv[1], reverse=True)[:k]
         return [Retrieved(self._chunks[i], s) for i, s in top]
 
@@ -104,5 +112,5 @@ class HybridIndex:
             raise KeyError(f"unknown account: {account_id}")
         if account_id not in self._scopes:
             self._scopes[account_id] = AccountScope(
-                account_id, self._by_account[account_id])
+                account_id, list(self._by_account[account_id]))
         return self._scopes[account_id]
