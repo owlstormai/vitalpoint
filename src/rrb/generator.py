@@ -63,8 +63,10 @@ def _make_account(rng: random.Random, i: int) -> dict:
     city, state = rng.choice(CITIES)
     seats = rng.choice([3, 4, 5, 6, 8, 10, 12, 15, 20, 30, 45, 60, 90])
     end_month = rng.randrange(12)  # renewal within the next 12 months
-    contract_end = date(2026, 8, 15) if end_month == 0 else _add_months(
-        date(2026, 8, 15), end_month)
+    contract_end = _add_months(date(2026, 8, 15), end_month)
+    # contract_start is the CURRENT annual term only; every account is an
+    # existing customer up for renewal, so usage/ticket history legitimately
+    # predates it (it spans prior terms).
     contract_start = _add_months(contract_end, -12)
     return {
         "account_id": f"acct_{i:04d}",
@@ -155,7 +157,8 @@ def _gen_documents(conn, rng, acct: dict, lab: dict) -> None:
     # contract excerpt — canary lives here so every account carries one
     body = (f"Contract excerpt for {acct['name']} ({acct['specialty']}, "
             f"{acct['city']}, {acct['state']}).\n\n{arch.clause}\n\n"
-            f"Term: {acct['contract_start']} through {acct['contract_end']}. "
+            f"Current term (renewal of prior term): {acct['contract_start']} "
+            f"through {acct['contract_end']}. "
             f"Annual fee ${acct['arr']:,} for {acct['seats']} seats. "
             f"({lab['canary']})")
     _add("contract", date.fromisoformat(acct["contract_start"]),
