@@ -48,8 +48,10 @@ def score_satisfaction(docs) -> Satisfaction:
     for d in docs:
         for sent in _sentences(d["body"]):
             low = sent.lower()
-            s_neg = sum(w for p, w in FRUSTRATION.items() if p in low)
-            s_pos = sum(w for p, w in SATISFACTION_MARKERS.items() if p in low)
+            s_neg = sum(w for p, w in FRUSTRATION.items()
+                        if re.search(rf"\b{re.escape(p)}\b", low))
+            s_pos = sum(w for p, w in SATISFACTION_MARKERS.items()
+                        if re.search(rf"\b{re.escape(p)}\b", low))
             neg += s_neg
             pos += s_pos
             if s_neg or s_pos:
@@ -59,7 +61,16 @@ def score_satisfaction(docs) -> Satisfaction:
     total = neg + pos
     score = 50 if total == 0 else round(100 * pos / total)
     label = "frustrated" if score < 40 else ("happy" if score > 70 else "neutral")
+    # restrict candidate quotes to the polarity that matches the overall
+    # verdict, so a stray negative line doesn't get quoted as evidence of a
+    # happy account (and vice versa); neutral keeps the prior behavior.
+    if score > 70:
+        candidates = [t for t in scored if t[0] > 0]
+    elif score < 40:
+        candidates = [t for t in scored if t[0] < 0]
+    else:
+        candidates = scored
     # most polarized quotes, matching the overall direction
-    scored.sort(key=lambda t: t[0], reverse=(score > 50))
-    quotes = [q for _, q in scored[:3]]
+    candidates.sort(key=lambda t: t[0], reverse=(score > 50))
+    quotes = [q for _, q in candidates[:3]]
     return Satisfaction(score=score, label=label, quotes=quotes)

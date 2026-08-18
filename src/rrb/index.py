@@ -20,6 +20,7 @@ def _tokens(text: str) -> list[str]:
 class Retrieved:
     chunk: Chunk
     score: float
+    matched_terms: int
 
 
 class _BM25:
@@ -58,6 +59,8 @@ class AccountScope:
     def __init__(self, account_id: str, chunks: list[Chunk]):
         self.account_id = account_id
         self._chunks = chunks
+        self._chunk_tokens = [set(_tokens(c.title + " " + c.text))
+                               for c in chunks]
         self._bm25 = _BM25([_tokens(c.text) for c in chunks])
         self._vec = TfidfVectorizer()
         try:
@@ -71,7 +74,8 @@ class AccountScope:
     def retrieve(self, query: str, k: int = 5) -> list[Retrieved]:
         if not self._chunks:
             return []
-        bm = self._bm25.scores(_tokens(query))
+        q_tokens = _tokens(query)
+        bm = self._bm25.scores(q_tokens)
         rankings = [bm]
         if self._mat is not None:
             dense = cosine_similarity(
@@ -90,7 +94,10 @@ class AccountScope:
             # downstream code might mistake for evidence.
             return []
         top = sorted(rrf.items(), key=lambda kv: kv[1], reverse=True)[:k]
-        return [Retrieved(self._chunks[i], s) for i, s in top]
+        q_set = set(q_tokens)
+        return [Retrieved(self._chunks[i], s,
+                          len(q_set & self._chunk_tokens[i]))
+                for i, s in top]
 
 
 class HybridIndex:

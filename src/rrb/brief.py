@@ -1,9 +1,23 @@
 from dataclasses import dataclass, field
 
-from rrb.index import HybridIndex
-from rrb.scoring import RiskResult, score_risk
+from rrb.index import AccountScope, HybridIndex
+from rrb.scoring import Driver, RiskResult, score_risk
 from rrb.sentiment import Satisfaction, score_satisfaction
 from rrb.signals import Signals, compute_signals
+
+# Drivers whose evidence lives in freeform ticket/QBR narrative rather than
+# in the structured usage/ticket signals. Detected up front (before risk
+# scoring) by requiring a strong lexical/semantic match — matched_terms >= 3
+# — so e.g. a healthy account's QBR isn't mistaken for a billing dispute.
+NARRATIVE_DRIVERS = [
+    "champion_departed", "billing_dispute", "onboarding_incomplete",
+    "price_sensitivity", "competitor_evaluation", "outage_impact",
+]
+
+# Floor below which a retrieved chunk is too weakly related to the driver's
+# query to be cited as evidence for it.
+CITATION_FLOOR = 2
+NARRATIVE_FLOOR = 3
 
 DRIVER_QUERIES = {
     "usage_decline": "logins falling seats not used deactivate accounts",
@@ -55,6 +69,29 @@ class Brief:
     unknowns: list[str] = field(default_factory=list)
 
 
+def _detect_narrative_drivers(scope: AccountScope):
+    """Look for strongly-matched evidence of narrative-only risk drivers.
+
+    Returns (drivers, chunk_by_key): drivers is a tuple of Driver ready to
+    feed into score_risk; chunk_by_key maps each detected key to the chunk
+    that justified it, so build_brief can cite that exact chunk rather than
+    re-retrieving (and potentially picking a different, weaker hit).
+    """
+    drivers: list[Driver] = []
+    chunk_by_key: dict[str, object] = {}
+    for key in NARRATIVE_DRIVERS:
+        hits = scope.retrieve(DRIVER_QUERIES[key], k=3)
+        hit = next((h for h in hits if h.matched_terms >= NARRATIVE_FLOOR), None)
+        if hit is None:
+            continue
+        c = hit.chunk
+        drivers.append(Driver(
+            key=key, detail=f"documented in {c.title} ({c.doc_date})",
+            points=12))
+        chunk_by_key[key] = c
+    return tuple(drivers), chunk_by_key
+
+
 def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
     acct = conn.execute("SELECT * FROM accounts WHERE account_id=?",
                         (account_id,)).fetchone()
@@ -65,8 +102,9 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
         "SELECT * FROM documents WHERE account_id=? AND doc_type IN "
         "('ticket','qbr')", (account_id,)).fetchall()
     sat = score_satisfaction(narrative)
-    risk = score_risk(sig, sat)
     scope = index.for_account(account_id)
+    narrative_drivers, narrative_chunks = _detect_narrative_drivers(scope)
+    risk = score_risk(sig, sat, narrative_drivers)
 
     citations: list[Citation] = []
     unknowns: list[str] = []
@@ -87,9 +125,14 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
     ]
     if risk.drivers:
         for d in risk.drivers:
-            hits = scope.retrieve(DRIVER_QUERIES[d.key], k=1)
-            if hits:
-                c = hits[0].chunk
+            if d.key in narrative_chunks:
+                c = narrative_chunks[d.key]
+            else:
+                hits = scope.retrieve(DRIVER_QUERIES[d.key], k=3)
+                hit = next((h for h in hits
+                           if h.matched_terms >= CITATION_FLOOR), None)
+                c = hit.chunk if hit else None
+            if c is not None:
                 excerpt = c.text[:180]
                 citations.append(Citation(
                     doc_id=c.doc_id, title=c.title, doc_date=c.doc_date,
@@ -112,7 +155,7 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
         lines.append(f"> “{q.text}” — {q.title}, {q.doc_date}")
 
     lines += ["", "## Recent History",
-              f"- Usage trend: {sig.usage_change_pct:+.0f}% logins "
+              f"- Usage trend: {round(sig.usage_change_pct):+d}% logins "
               f"quarter-over-quarter (usage_metrics)",
               f"- Support: {sig.avg_tickets_per_month:.1f} tickets/month, "
               f"{sig.open_high_severity} open high-severity (tickets)",

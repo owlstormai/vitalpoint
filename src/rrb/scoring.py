@@ -18,7 +18,8 @@ class RiskResult:
     drivers: list[Driver]
 
 
-def score_risk(sig: Signals, sat: Satisfaction) -> RiskResult:
+def score_risk(sig: Signals, sat: Satisfaction,
+               narrative: tuple[Driver, ...] = ()) -> RiskResult:
     drivers: list[Driver] = []
 
     def add(key, detail, pts):
@@ -37,8 +38,8 @@ def score_risk(sig: Signals, sat: Satisfaction) -> RiskResult:
             f"{sig.avg_tickets_per_month:.1f} tickets/month average", 18)
     if sig.max_open_ticket_age_days >= 30:
         add("unresolved_tickets",
-            f"oldest open ticket {sig.max_open_ticket_age_days} days "
-            f"({sig.open_high_severity} open high-severity)", 15)
+            f"oldest open ticket {sig.max_open_ticket_age_days} days; "
+            f"{sig.open_high_severity} open high-severity", 15)
     if sig.seat_utilization < 0.5:
         add("low_seat_utilization",
             f"only {sig.seat_utilization:.0%} of paid seats active", 10)
@@ -48,6 +49,8 @@ def score_risk(sig: Signals, sat: Satisfaction) -> RiskResult:
     elif sat.label == "neutral" and sat.score < 50:
         add("negative_sentiment",
             f"satisfaction score {sat.score}/100 trending negative", 8)
+
+    drivers.extend(narrative)
 
     points = sum(d.points for d in drivers)
     if sig.days_to_renewal < 90 and points > 0:

@@ -51,3 +51,33 @@ def test_withheld_qbr_appears_in_unknowns(tmp_path):
     normal = [a for a, l in labels.items() if not l["withheld"]][0]
     b2 = build_brief(conn, index, normal)
     assert "qbr_notes" not in b2.unknowns
+
+
+def test_healthy_account_evidence_never_misattributes_unrelated_quote(tmp_path):
+    # Regression: a healthy account's glowing QBR line was previously being
+    # cited as "Evidence:" for an unrelated risk driver (e.g.
+    # unresolved_tickets) because the old code took the top-1 retrieval hit
+    # unconditionally. The relevance floor (matched_terms >= 2) should stop
+    # that — this praise line should never show up after "Evidence:".
+    conn, index, labels = _setup(tmp_path, n=200)
+    healthy = [a for a in labels if conn.execute(
+        "SELECT archetype FROM accounts WHERE account_id=?",
+        (a,)).fetchone()["archetype"] == "healthy_quiet"]
+    assert healthy
+    for acct in healthy:
+        b = build_brief(conn, index, acct)
+        for line in b.markdown.splitlines():
+            if "Evidence:" in line:
+                assert "praised the reminder feature" not in line
+
+
+def test_billing_dispute_names_the_problem(tmp_path):
+    conn, index, labels = _setup(tmp_path, n=200)
+    acct = next(a for a in labels if conn.execute(
+        "SELECT archetype FROM accounts WHERE account_id=?",
+        (a,)).fetchone()["archetype"] == "billing_dispute")
+    b = build_brief(conn, index, acct)
+    assert "billing_dispute" in b.markdown
+    actions_section = b.markdown.split("## Recommended Actions", 1)[1]
+    actions_section = actions_section.split("## What We Don't Know", 1)[0]
+    assert "disputed invoice" in actions_section

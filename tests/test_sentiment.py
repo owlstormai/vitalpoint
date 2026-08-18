@@ -45,3 +45,20 @@ def test_quotes_are_verbatim_with_provenance(tmp_path):
 def test_no_docs_returns_none_label(tmp_path):
     sat = score_satisfaction([])
     assert sat.label == "unknown" and sat.quotes == []
+
+
+def test_happy_result_excludes_negative_quote():
+    # Two strong positive sentences and one negative sentence in the same
+    # doc, engineered so the overall score lands above the "happy" (>70)
+    # threshold. The negative sentence must not be quoted as evidence even
+    # though it was part of the scoring input.
+    docs = [{
+        "doc_id": "d1", "title": "QBR notes", "doc_date": "2026-01-01",
+        "body": ("The team is very happy with the platform. "
+                  "Everything works great for us. "
+                  "Our bookkeeper is upset about the invoice."),
+    }]
+    sat = score_satisfaction(docs)
+    assert sat.label == "happy" and sat.score > 70
+    assert sat.quotes
+    assert not any("upset" in q.text.lower() for q in sat.quotes)
