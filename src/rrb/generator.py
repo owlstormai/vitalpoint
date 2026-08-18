@@ -1,5 +1,5 @@
 import random
-from datetime import date
+from datetime import date, timedelta
 
 from rrb.archetypes import ARCHETYPES
 
@@ -77,6 +77,53 @@ def _add_months(d: date, n: int) -> date:
     return date(d.year + m // 12, m % 12 + 1, min(d.day, 28))
 
 
+def _months_list() -> list[str]:
+    # N_MONTHS month-strings ending the month before AS_OF (2025-05 .. 2026-07)
+    out = []
+    for back in range(N_MONTHS, 0, -1):
+        out.append(_add_months(AS_OF.replace(day=1), -back).strftime("%Y-%m"))
+    return out
+
+
+def _gen_usage(conn, rng, acct: dict) -> None:
+    arch = ARCHETYPES[acct["archetype"]]
+    seats = acct["seats"]
+    base_logins = seats * 22.0
+    active = min(seats, max(1, round(seats * rng.uniform(0.75, 1.0))))
+    monthly_mult = arch.usage_trend ** (1 / 3)  # quarterly trend → monthly
+    level = 1.0
+    for month in _months_list():
+        level *= monthly_mult
+        jitter = rng.uniform(0.9, 1.1)
+        logins = max(1, round(base_logins * level * jitter))
+        act = max(1, min(seats, round(active * level * jitter)))
+        appts = max(0, round(logins * rng.uniform(2.5, 3.5)))
+        conn.execute(
+            "INSERT INTO usage_metrics VALUES (?,?,?,?,?)",
+            (acct["account_id"], month, logins, act, appts))
+
+
+def _gen_tickets(conn, rng, acct: dict, labels: dict) -> None:
+    arch = ARCHETYPES[acct["archetype"]]
+    n = max(0, round(rng.gauss(arch.tickets_per_month * N_MONTHS,
+                               arch.tickets_per_month)))
+    arcs = arch.ticket_arcs
+    for j in range(n):
+        driver, subject, body = arcs[j % len(arcs)]
+        opened = AS_OF - timedelta(days=rng.randrange(7, N_MONTHS * 30))
+        # unresolved_tickets archetypes keep recent tickets open a long time
+        stays_open = (driver == "unresolved_tickets" or
+                      (arch.severity == "high" and rng.random() < 0.25) or
+                      rng.random() < 0.05)
+        closed = None if stays_open else (
+            opened + timedelta(days=rng.randrange(1, 14))).isoformat()
+        tid = f"tick_{acct['account_id'][5:]}_{j:03d}"
+        conn.execute(
+            "INSERT INTO tickets VALUES (?,?,?,?,?,?,?)",
+            (tid, acct["account_id"], opened.isoformat(), closed,
+             arch.severity, "open" if closed is None else "closed", subject))
+
+
 def generate(conn, seed: int, n_accounts: int) -> dict:
     """Populate the db; returns golden labels {account_id: {...}}."""
     rng = random.Random(seed)
@@ -97,5 +144,7 @@ def generate(conn, seed: int, n_accounts: int) -> dict:
             "canary": None,
             "withheld": [],
         }
+        _gen_usage(conn, rng, acct)
+        _gen_tickets(conn, rng, acct, labels[acct["account_id"]])
     conn.commit()
     return labels
