@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS accounts (
   arr INTEGER NOT NULL,
   contract_start TEXT NOT NULL,
   contract_end TEXT NOT NULL,
-  auto_renew INTEGER NOT NULL,
+  auto_renew INTEGER NOT NULL CHECK (auto_renew IN (0, 1)),
   archetype TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS usage_metrics (
@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS documents (
 def connect(path: str | Path) -> sqlite3.Connection:
     conn = sqlite3.connect(path)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
 
