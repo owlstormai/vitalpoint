@@ -20,12 +20,14 @@ CITATION_FLOOR = 2
 NARRATIVE_FLOOR = 3
 
 DRIVER_QUERIES = {
-    "usage_decline": "logins falling seats not used deactivate accounts",
+    "usage_decline": "logins falling seats not used deactivate accounts usage "
+                      "stopped drifting quiet archive records export schedules",
     "high_ticket_volume": "escalate unacceptable failing again support",
     "unresolved_tickets": "still waiting not fixed open ticket",
     "champion_departed": "office manager left transfer administrator rights",
     "billing_dispute": "overcharged invoice credit dispute",
-    "onboarding_incomplete": "migration incomplete training never finished",
+    "onboarding_incomplete": "migration records not migrated incomplete "
+                             "training never finished staff refuse charts",
     "price_sensitivity": "renewal pricing increase cheaper tier budget",
     "competitor_evaluation": "competitor comparing options feature roadmap",
     "outage_impact": "outage downtime unreachable SLA credit",
@@ -87,7 +89,7 @@ def _detect_narrative_drivers(scope: AccountScope):
         c = hit.chunk
         drivers.append(Driver(
             key=key, detail=f"documented in {c.title} ({c.doc_date})",
-            points=12))
+            points=20))
         chunk_by_key[key] = c
     return tuple(drivers), chunk_by_key
 

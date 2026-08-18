@@ -142,7 +142,7 @@ ARCHETYPES: dict[str, Archetype] = {a.key: a for a in [
     Archetype(
         key="champion_left", risk="high", satisfaction="neutral",
         drivers=["champion_departed", "usage_decline"],
-        usage_trend=0.8, tickets_per_month=0.5, severity="normal",
+        usage_trend=0.72, tickets_per_month=0.5, severity="normal",
         ticket_arcs=[
             ("champion_departed", "Admin transfer request",
              "Our office manager, who set up the system, has left the practice. Please "
@@ -186,7 +186,7 @@ ARCHETYPES: dict[str, Archetype] = {a.key: a for a in [
     Archetype(
         key="onboarding_stuck", risk="high", satisfaction="frustrated",
         drivers=["onboarding_incomplete", "low_seat_utilization"],
-        usage_trend=0.9, tickets_per_month=1.5, severity="normal",
+        usage_trend=0.6, tickets_per_month=1.5, severity="normal",
         ticket_arcs=[
             ("onboarding_incomplete", "Data migration still incomplete",
              "Six months in and our historical patient records are still not migrated. "
@@ -248,7 +248,7 @@ ARCHETYPES: dict[str, Archetype] = {a.key: a for a in [
     Archetype(
         key="outage_affected", risk="medium", satisfaction="frustrated",
         drivers=["outage_impact"],
-        usage_trend=0.92, tickets_per_month=2.0, severity="high",
+        usage_trend=0.92, tickets_per_month=1.2, severity="normal",
         ticket_arcs=[
             ("outage_impact", "System down during Monday clinic hours",
              "The scheduler was unreachable for three hours on our busiest morning. We had "

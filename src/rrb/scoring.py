@@ -25,18 +25,25 @@ def score_risk(sig: Signals, sat: Satisfaction,
     def add(key, detail, pts):
         drivers.append(Driver(key=key, detail=detail, points=pts))
 
-    if sig.usage_change_pct <= -20:
+    if sig.usage_change_pct <= -30:
         add("usage_decline",
             f"logins down {abs(sig.usage_change_pct):.0f}% quarter-over-quarter",
-            25)
+            35)
+    elif sig.usage_change_pct <= -20:
+        add("usage_decline",
+            f"logins down {abs(sig.usage_change_pct):.0f}% quarter-over-quarter",
+            18)
     elif sig.usage_change_pct <= -10:
         add("usage_decline",
             f"logins down {abs(sig.usage_change_pct):.0f}% quarter-over-quarter",
-            12)
+            10)
     if sig.avg_tickets_per_month >= 2.0:
         add("high_ticket_volume",
             f"{sig.avg_tickets_per_month:.1f} tickets/month average", 18)
-    if sig.max_open_ticket_age_days >= 30:
+    # Require a genuinely high-severity backlog, not just an old low/normal
+    # ticket that happened to stay open by chance — otherwise this driver
+    # fires as noise for archetypes that were never meant to carry it.
+    if sig.max_open_ticket_age_days >= 30 and sig.open_high_severity >= 1:
         add("unresolved_tickets",
             f"oldest open ticket {sig.max_open_ticket_age_days} days; "
             f"{sig.open_high_severity} open high-severity", 15)
@@ -45,7 +52,7 @@ def score_risk(sig: Signals, sat: Satisfaction,
             f"only {sig.seat_utilization:.0%} of paid seats active", 10)
     if sat.label == "frustrated":
         add("negative_sentiment",
-            f"satisfaction score {sat.score}/100 from ticket and QBR tone", 25)
+            f"satisfaction score {sat.score}/100 from ticket and QBR tone", 20)
     elif sat.label == "neutral" and sat.score < 50:
         add("negative_sentiment",
             f"satisfaction score {sat.score}/100 trending negative", 8)
