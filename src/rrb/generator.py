@@ -1,10 +1,19 @@
 import random
 from datetime import date, timedelta
+from pathlib import Path
+
+import yaml
 
 from rrb.archetypes import ARCHETYPES
 
 AS_OF = date(2026, 8, 1)
 N_MONTHS = 15
+
+CANARY_WORDS = [
+    "walrus", "quasar", "bassoon", "glacier", "topaz", "merlot", "falcon",
+    "nimbus", "juniper", "cobalt", "saffron", "obsidian", "tundra", "lyric",
+    "harbor", "ember", "fjord", "zephyr", "onyx", "prairie",
+]
 
 SPECIALTIES = [
     "dental", "family medicine", "pediatrics", "dermatology",
@@ -124,6 +133,65 @@ def _gen_tickets(conn, rng, acct: dict, labels: dict) -> None:
              arch.severity, "open" if closed is None else "closed", subject))
 
 
+def _canary(rng, acct_id: str) -> str:
+    w1, w2 = rng.sample(CANARY_WORDS, 2)
+    return f"internal ref {w1}-{w2}-{acct_id[5:]}"
+
+
+def _gen_documents(conn, rng, acct: dict, lab: dict) -> None:
+    arch = ARCHETYPES[acct["archetype"]]
+    acct_id = acct["account_id"]
+    lab["canary"] = _canary(rng, acct_id)
+    doc_n = 0
+
+    def _add(doc_type: str, doc_date, title: str, body: str) -> str:
+        nonlocal doc_n
+        doc_id = f"doc_{acct_id[5:]}_{doc_n:03d}"
+        doc_n += 1
+        conn.execute("INSERT INTO documents VALUES (?,?,?,?,?,?)",
+                     (doc_id, acct_id, doc_type, doc_date.isoformat(), title, body))
+        return doc_id
+
+    # contract excerpt — canary lives here so every account carries one
+    body = (f"Contract excerpt for {acct['name']} ({acct['specialty']}, "
+            f"{acct['city']}, {acct['state']}).\n\n{arch.clause}\n\n"
+            f"Term: {acct['contract_start']} through {acct['contract_end']}. "
+            f"Annual fee ${acct['arr']:,} for {acct['seats']} seats. "
+            f"({lab['canary']})")
+    _add("contract", date.fromisoformat(acct["contract_start"]),
+         f"Master Subscription Agreement — {acct['name']}", body)
+
+    # ticket body documents mirror the ticket rows' arcs; record evidence
+    for j, (driver, subject, tbody) in enumerate(arch.ticket_arcs):
+        doc_date = AS_OF - timedelta(days=rng.randrange(14, 200))
+        doc_id = _add("ticket", doc_date, subject,
+                      f"Support ticket from {acct['name']}: {tbody}")
+        if driver in lab["drivers"] and driver not in lab["evidence"]:
+            lab["evidence"][driver] = doc_id
+
+    # QBR notes — quarterly; a slice of accounts has them withheld
+    if rng.random() < 0.12:
+        lab["withheld"].append("qbr_notes")
+    else:
+        n_qbr = rng.randrange(2, 5)
+        paras = arch.qbr_paragraphs
+        for q in range(n_qbr):
+            driver, text = paras[q % len(paras)]
+            doc_date = AS_OF - timedelta(days=90 * (q + 1) - rng.randrange(0, 20))
+            doc_id = _add(
+                "qbr", doc_date, f"QBR notes — {acct['name']} Q{q + 1}",
+                f"Quarterly business review, {acct['name']} "
+                f"({acct['specialty']}). {text}")
+            if driver in lab["drivers"] and driver not in lab["evidence"]:
+                lab["evidence"][driver] = doc_id
+    conn.commit()
+
+
+def write_labels(labels: dict, path: str | Path) -> None:
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    Path(path).write_text(yaml.safe_dump(labels, sort_keys=True))
+
+
 def generate(conn, seed: int, n_accounts: int) -> dict:
     """Populate the db; returns golden labels {account_id: {...}}."""
     rng = random.Random(seed)
@@ -146,5 +214,8 @@ def generate(conn, seed: int, n_accounts: int) -> dict:
         }
         _gen_usage(conn, rng, acct)
         _gen_tickets(conn, rng, acct, labels[acct["account_id"]])
+        _gen_documents(conn, rng, acct, labels[acct["account_id"]])
+        lab = labels[acct["account_id"]]
+        lab["drivers"] = [d for d in lab["drivers"] if d in lab["evidence"]]
     conn.commit()
     return labels
