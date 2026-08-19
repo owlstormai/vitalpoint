@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from rrb.brief import build_brief
@@ -8,6 +9,7 @@ from rrb.db import connect, init_db
 from rrb.export import brief_to_dict
 from rrb.generator import generate, write_labels
 from rrb.index import HybridIndex
+from rrb.ingest import ingest, load_mapping, write_export
 from rrb.llm import maybe_rewrite
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -38,6 +40,19 @@ def main(argv=None) -> None:
     ex.add_argument("--db", default=str(DEFAULT_DB))
     ex.add_argument("--out", default="-",
                     help="file path, or - for stdout (default)")
+
+    ing = sub.add_parser(
+        "ingest", help="load a customer's CSV exports via a mapping file")
+    ing.add_argument("--from", dest="src", required=True,
+                     help="directory holding the CSV exports")
+    ing.add_argument("--mapping", required=True, help="mapping YAML")
+    ing.add_argument("--db", default=str(DEFAULT_DB))
+
+    xc = sub.add_parser(
+        "export-csv", help="write the dataset out in a mapping's column names")
+    xc.add_argument("--out", required=True)
+    xc.add_argument("--mapping", required=True)
+    xc.add_argument("--db", default=str(DEFAULT_DB))
 
     sv = sub.add_parser("serve", help="run the web dashboard")
     sv.add_argument("--db", default=str(DEFAULT_DB))
@@ -95,6 +110,27 @@ def main(argv=None) -> None:
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(text)
             print(f"wrote {len(payload)} brief(s) → {out}")
+        return
+
+    if args.cmd == "ingest":
+        db_path = Path(args.db)
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+        db_path.unlink(missing_ok=True)
+        conn = init_db(db_path)
+        report = ingest(conn, args.src, load_mapping(args.mapping))
+        print(report.summary())
+        if not report.ok:
+            print("\ningest failed — nothing usable was loaded", file=sys.stderr)
+            sys.exit(1)
+        print(f"\nloaded into {db_path}")
+        return
+
+    if args.cmd == "export-csv":
+        conn = connect(args.db)
+        written = write_export(conn, args.out, load_mapping(args.mapping))
+        for table, n in written.items():
+            print(f"  {table:<15} {n:>6} rows")
+        print(f"\nwrote {args.out}")
         return
 
     if args.cmd == "serve":

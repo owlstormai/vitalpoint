@@ -193,6 +193,7 @@ scripts/make_dataset.py  (or `rrb make-data`)
 | `sentiment.py` | Lexicon satisfaction scoring with verbatim cited quotes |
 | `scoring.py` | The transparent weighted risk rubric |
 | `brief.py` | Brief assembly, citation relevance floor, abstention |
+| `ingest.py` | Maps a customer's CSV exports onto the canonical schema, with validation |
 | `export.py` | JSON serialization for downstream systems |
 | `web.py` / `templates.py` | FastAPI routes / all presentation markup |
 | `llm.py` | Optional Claude rewrite behind a citation-preserving contract |
@@ -245,6 +246,60 @@ Vercel as a single Python function with no build step:
 
 For local development, `rrb serve` runs the same app read-write against a
 dataset you generate yourself.
+
+## Using this on your own data
+
+The schema is a **target**, not an assumption about anyone's systems. A real
+customer arrives with a CRM account export, a helpdesk ticket export and a
+usage report, each using its own column names. Translating those is a mapping
+file, not a code change:
+
+```bash
+.venv/bin/rrb ingest --from ./their-exports --mapping mappings/acme.yaml --db acme.sqlite
+```
+
+The mapping is the only per-customer artifact. Left of the colon is the
+canonical field; right is their column heading:
+
+```yaml
+files:
+  accounts:
+    file: accounts.csv
+    columns:
+      account_id: Account ID
+      name: Account Name
+      arr: Annual Recurring Revenue
+      contract_end: Contract End Date
+```
+
+Fields you leave out fall back to documented defaults, so a customer who
+doesn't track seat counts still ingests cleanly. See
+[`data/mappings/example_crm.yaml`](data/mappings/example_crm.yaml) for a full
+example with Salesforce- and Zendesk-shaped column names.
+
+**Ingest reports rather than crashes.** It collects every problem and hands
+back a summary, because the useful output for a customer is "here are the 14
+things wrong with this export," not the first one alphabetically. It names
+unmapped required fields, unparseable dates (accepting `MM/DD/YYYY` as well as
+ISO, since CRM exports routinely use it), and orphan rows whose account isn't
+in the account export — the classic migration failure that otherwise corrupts
+a dataset silently.
+
+### Verifying the mapping actually works
+
+The same mapping runs backwards, writing the dataset out under a customer's
+column names. That gives a genuine round-trip test — foreign-shaped CSVs in,
+identical database out — which is exercised in CI:
+
+```bash
+.venv/bin/rrb export-csv --out ./client-export --mapping data/mappings/example_crm.yaml
+```
+
+Round-tripping the full 300-account dataset (9,774 rows across four tables)
+reproduces every customer-supplied column exactly, and `rrb brief` then runs
+against the ingested database with **no code changes** — which is the point:
+once the mapping is right, risk scoring, sentiment, briefs, the JSON export
+and the eval harness all work unmodified.
 
 ## Delivering briefs to a CRM
 
@@ -332,9 +387,9 @@ draft is kept rather than aborting a batch run.
 .venv/bin/python -m pytest tests/ -q
 ```
 
-58 tests cover generator determinism (same seed → identical dataset), the
+65 tests cover generator determinism (same seed → identical dataset), the
 scoring rubric, the scoped retriever (unscoped access is impossible by
-construction), sentiment, brief assembly, the JSON export contract, the CLI,
+construction), sentiment, brief assembly, the JSON export contract, the ingest mapping round-trip, the CLI,
 and the web routes. CI runs the suite, rebuilds the 300-account dataset, and
 runs the eval gates on every push.
 

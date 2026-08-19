@@ -1,0 +1,60 @@
+# Example mapping: a CRM account export + a helpdesk ticket export + a usage
+# report, translated onto the canonical schema.
+#
+# This is the file you edit per customer. Nothing else changes: point `rrb
+# ingest` at their CSVs and this mapping, and the rest of the system — risk
+# scoring, sentiment, briefs, evals — runs unmodified.
+#
+# Left of the colon is our canonical field. Right is THEIR column heading.
+# Fields you leave out fall back to the defaults in rrb/ingest.py CANONICAL,
+# so a customer who does not track, say, seat counts still ingests cleanly.
+
+name: Example CRM + helpdesk export
+description: >
+  Column names modelled on a typical Salesforce account export, a Zendesk
+  ticket export, and a product-usage report.
+
+files:
+  accounts:
+    file: accounts.csv
+    columns:
+      account_id: Account ID
+      name: Account Name
+      specialty: Industry
+      city: Billing City
+      state: Billing State
+      seats: Licensed Seats
+      arr: Annual Recurring Revenue
+      contract_start: Contract Start Date
+      contract_end: Contract End Date
+      auto_renew: Auto Renew
+
+  usage_metrics:
+    file: usage.csv
+    columns:
+      account_id: Account ID
+      month: Month
+      logins: Logins
+      active_users: Active Users
+      appointments: Appointments Booked
+
+  tickets:
+    file: tickets.csv
+    columns:
+      ticket_id: Ticket ID
+      account_id: Organization ID
+      opened_at: Created At
+      closed_at: Solved At
+      severity: Priority
+      status: Status
+      subject: Subject
+
+  documents:
+    file: documents.csv
+    columns:
+      doc_id: Document ID
+      account_id: Account ID
+      doc_type: Type
+      doc_date: Date
+      title: Title
+      body: Content
