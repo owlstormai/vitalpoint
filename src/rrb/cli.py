@@ -1,9 +1,11 @@
 import argparse
+import json
 from pathlib import Path
 
 from rrb.brief import build_brief
 from rrb.chunker import chunk_documents
 from rrb.db import connect, init_db
+from rrb.export import brief_to_dict
 from rrb.generator import generate, write_labels
 from rrb.index import HybridIndex
 from rrb.llm import maybe_rewrite
@@ -28,6 +30,14 @@ def main(argv=None) -> None:
     br.add_argument("--all", action="store_true")
     br.add_argument("--db", default=str(DEFAULT_DB))
     br.add_argument("--out", default=str(ROOT / "runs" / "briefs"))
+
+    ex = sub.add_parser(
+        "export", help="serialize briefs to JSON for CRM delivery")
+    ex.add_argument("account_id", nargs="?")
+    ex.add_argument("--all", action="store_true")
+    ex.add_argument("--db", default=str(DEFAULT_DB))
+    ex.add_argument("--out", default="-",
+                    help="file path, or - for stdout (default)")
 
     sv = sub.add_parser("serve", help="run the web dashboard")
     sv.add_argument("--db", default=str(DEFAULT_DB))
@@ -62,6 +72,29 @@ def main(argv=None) -> None:
                 ap.error("account_id required unless --all")
             b = build_brief(conn, index, args.account_id)
             print(maybe_rewrite(b))
+        return
+
+    if args.cmd == "export":
+        conn = connect(args.db)
+        index = HybridIndex(chunk_documents(conn))
+        ids = index.account_ids if args.all else [args.account_id]
+        if not args.all and not args.account_id:
+            ap.error("account_id required unless --all")
+        payload = []
+        for acct_id in ids:
+            acct = conn.execute("SELECT * FROM accounts WHERE account_id=?",
+                                (acct_id,)).fetchone()
+            if acct is None:
+                ap.error(f"unknown account: {acct_id}")
+            payload.append(brief_to_dict(acct, build_brief(conn, index, acct_id)))
+        text = json.dumps(payload if args.all else payload[0], indent=2)
+        if args.out == "-":
+            print(text)
+        else:
+            out = Path(args.out)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(text)
+            print(f"wrote {len(payload)} brief(s) → {out}")
         return
 
     if args.cmd == "serve":
