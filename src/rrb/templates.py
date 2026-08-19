@@ -19,12 +19,16 @@ FONTS = ("https://fonts.googleapis.com/css2?"
 CSS = """
 *,*::before,*::after{box-sizing:border-box}
 :root{
-  --bg:#f2f6f5; --surface:#ffffff; --surface-2:#f7faf9; --sunk:#eaf0ef;
-  --ink:#0d1f1d; --ink-2:#4a5f5c; --ink-3:#7d908d;
-  --line:#e2eae8; --line-2:#cfdbd9;
-  --teal:#0d6e66; --teal-2:#12958a; --teal-bg:#e4f2f0;
-  --high:#c0453a; --high-bg:#fbeae8; --high-line:#f0cdc8;
-  --med:#a96f14; --med-bg:#fcf1de; --low:#127a5c; --low-bg:#e2f3ec;
+  /* No pure white anywhere: paper-toned off-whites cut the glare of a bright
+     screen while keeping enough separation between page, card and sunk. */
+  --bg:#e7edeb; --surface:#f5f9f8; --surface-2:#eef4f2; --sunk:#e0e9e6;
+  /* --ink-3 carries real content (column headers, citation metadata, dates),
+     so it is set to clear 4.5:1 on every surface above, not just on cards. */
+  --ink:#0d1f1d; --ink-2:#465b58; --ink-3:#556764;
+  --line:#d9e4e1; --line-2:#c2d1cd;
+  --teal:#0d6e66; --teal-2:#12958a; --teal-bg:#e4f2f0; --on-teal:#ffffff;
+  --high:#b03a30; --high-bg:#fbeae8; --high-line:#f0cdc8;
+  --med:#8a590c; --med-bg:#fcf1de; --low:#127a5c; --low-bg:#e2f3ec;
   --shadow:0 1px 2px rgba(13,31,29,.05),0 8px 24px -12px rgba(13,31,29,.14);
   --shadow-lg:0 2px 4px rgba(13,31,29,.05),0 18px 44px -20px rgba(13,31,29,.24);
   --r:14px; --r-sm:9px;
@@ -35,9 +39,9 @@ CSS = """
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#0a1413; --surface:#101d1b; --surface-2:#152321; --sunk:#1b2a28;
-    --ink:#e9f2f0; --ink-2:#a3b6b3; --ink-3:#7a8d8a;
+    --ink:#e9f2f0; --ink-2:#a3b6b3; --ink-3:#849794;
     --line:#1e2f2d; --line-2:#2a3d3a;
-    --teal:#3ec7b6; --teal-2:#5bdccb; --teal-bg:#12312d;
+    --teal:#3ec7b6; --teal-2:#5bdccb; --teal-bg:#12312d; --on-teal:#062120;
     --high:#f08472; --high-bg:#2e1512; --high-line:#4a221c;
     --med:#e0aa4e; --med-bg:#2c2010; --low:#4fc79b; --low-bg:#0f2d23;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
@@ -46,15 +50,20 @@ CSS = """
 }
 :root[data-theme="dark"]{
   --bg:#0a1413; --surface:#101d1b; --surface-2:#152321; --sunk:#1b2a28;
-  --ink:#e9f2f0; --ink-2:#a3b6b3; --ink-3:#7a8d8a;
+  --ink:#e9f2f0; --ink-2:#a3b6b3; --ink-3:#849794;
   --line:#1e2f2d; --line-2:#2a3d3a;
-  --teal:#3ec7b6; --teal-2:#5bdccb; --teal-bg:#12312d;
+  --teal:#3ec7b6; --teal-2:#5bdccb; --teal-bg:#12312d; --on-teal:#062120;
   --high:#f08472; --high-bg:#2e1512; --high-line:#4a221c;
   --med:#e0aa4e; --med-bg:#2c2010; --low:#4fc79b; --low-bg:#0f2d23;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
   --shadow-lg:0 2px 4px rgba(0,0,0,.4),0 18px 44px -20px rgba(0,0,0,.7);
 }
 html{-webkit-text-size-adjust:100%}
+/* one focus treatment for every interactive element, so keyboard users get
+   the same affordance the selects already had */
+:where(a,button,select,[tabindex]):focus-visible{
+  outline:2px solid var(--teal);outline-offset:2px;border-radius:4px;
+}
 body{
   margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
   font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
@@ -76,6 +85,9 @@ a{color:inherit}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo{
   width:30px;height:30px;border-radius:9px;background:var(--teal);
+  /* --teal is deliberately light in dark mode, so the glyph rides a token
+     that flips with it rather than a hardcoded white that would disappear */
+  color:var(--on-teal);
   display:grid;place-items:center;flex:none;
   box-shadow:0 2px 8px -2px color-mix(in srgb,var(--teal) 60%,transparent);
 }
@@ -85,12 +97,29 @@ a{color:inherit}
 .spacer{flex:1}
 .asof{font-family:var(--mono);font-size:11px;color:var(--ink-3);
   letter-spacing:.02em}
-.icon-btn{
-  width:32px;height:32px;border-radius:8px;border:1px solid var(--line-2);
-  background:var(--surface);color:var(--ink-2);cursor:pointer;display:grid;
-  place-items:center;transition:color .16s,border-color .16s,transform .16s;
+.theme-btn{
+  display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 11px;
+  border-radius:8px;border:1px solid var(--line-2);background:var(--surface);
+  color:var(--ink-2);cursor:pointer;font-family:var(--sans);font-size:12.5px;
+  font-weight:600;transition:color .16s,border-color .16s,transform .16s;
 }
-.icon-btn:hover{color:var(--teal);border-color:var(--teal);transform:translateY(-1px)}
+.theme-btn:hover{color:var(--teal);border-color:var(--teal);
+  transform:translateY(-1px)}
+.theme-btn svg{flex:none}
+/* The button advertises the mode it switches TO, so its icon and label must
+   track the resolved theme. Doing the swap in CSS rather than JS keeps it
+   correct on first paint with no flash of the wrong label. */
+.t-sun,.t-light{display:none}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .t-sun,
+  :root:not([data-theme="light"]) .t-light{display:inline-flex}
+  :root:not([data-theme="light"]) .t-moon,
+  :root:not([data-theme="light"]) .t-dark{display:none}
+}
+:root[data-theme="dark"] .t-sun,
+:root[data-theme="dark"] .t-light{display:inline-flex}
+:root[data-theme="dark"] .t-moon,
+:root[data-theme="dark"] .t-dark{display:none}
 /* ---------- page head ---------- */
 .pagehead{margin-bottom:24px}
 .pagehead h1{
@@ -148,14 +177,9 @@ select:focus{outline:none;border-color:var(--teal);
 .btn{
   font-family:var(--sans);font-size:13.5px;font-weight:600;padding:9px 18px;
   border-radius:var(--r-sm);cursor:pointer;border:1px solid var(--teal);
-  background:var(--teal);color:#fff;transition:filter .16s,transform .16s;
+  background:var(--teal);color:var(--on-teal);
+  transition:filter .16s,transform .16s;
   text-decoration:none;display:inline-block;
-}
-/* dark-mode teal is light, so solid buttons need dark label text — but this
-   must not capture ghost buttons, whose label sits on a dark surface */
-:root[data-theme="dark"] .btn:not(.ghost){color:#062120}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .btn:not(.ghost){color:#062120}
 }
 .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .btn.ghost{background:var(--surface-2);color:var(--ink-2);
@@ -299,6 +323,18 @@ ol.actions li::before{
 @media (max-width:680px){
   .wrap{padding:0 15px 60px}.topbar .inner{padding:12px 15px}
   th{position:static}.count{margin-left:0}
+  /* four full-height KPI cards would push the account table ~1400px down on a
+     phone; pair them up and tighten so the actual work stays reachable */
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:13px 14px}
+  .kpi .k{font-size:10.5px;margin-bottom:6px}
+  .kpi .v{font-size:25px}
+  .kpi .sub{font-size:11px;margin-top:5px}
+  .pagehead p{font-size:14px}
+  .field,.field select{width:100%}
+  /* the table already scrolls sideways, so give the name column a floor
+     rather than letting "Riverside Physical Therapy" wrap onto three lines */
+  th:first-child,td:first-child{min-width:196px}
 }
 @media print{
   .topbar,.backlink,.filters{display:none}
@@ -308,31 +344,54 @@ ol.actions li::before{
 
 THEME_JS = """
 (function(){
+  // Dark is this tool's house look, so it is the default rather than the
+  // system preference; a stored choice always wins and persists.
   var k='rrb-theme',r=document.documentElement,s=localStorage.getItem(k);
-  if(s)r.setAttribute('data-theme',s);
+  r.setAttribute('data-theme',s==='light'||s==='dark'?s:'dark');
   window.rrbToggle=function(){
-    var cur=r.getAttribute('data-theme');
-    if(!cur)cur=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
-    var n=cur==='dark'?'light':'dark';
+    var n=r.getAttribute('data-theme')==='dark'?'light':'dark';
     r.setAttribute('data-theme',n);localStorage.setItem(k,n);
   };
 })();
 """
 
 LOGO = ('<span class="logo"><svg width="17" height="17" viewBox="0 0 24 24" '
-        'fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" '
+        'fill="none" stroke="currentColor" stroke-width="2.4" '
+        'stroke-linecap="round" '
         'stroke-linejoin="round"><path d="M2 12h4l2.5-7 5 14 2.5-7h6"/></svg>'
         '</span>')
 
-SUN = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" '
-       'stroke="currentColor" stroke-width="2" stroke-linecap="round">'
-       '<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4'
-       'M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
-       '</svg>')
+SUN = ('<svg class="t-sun" width="15" height="15" viewBox="0 0 24 24" '
+       'fill="none" stroke="currentColor" stroke-width="2" '
+       'stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/>'
+       '<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2'
+       'M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>')
+
+MOON = ('<svg class="t-moon" width="15" height="15" viewBox="0 0 24 24" '
+        'fill="none" stroke="currentColor" stroke-width="2" '
+        'stroke-linecap="round" stroke-linejoin="round">'
+        '<path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7Z"/>'
+        '</svg>')
+
+THEME_BTN = (f'<button class="theme-btn" onclick="rrbToggle()" '
+             f'aria-label="Switch between light and dark theme">'
+             f'{SUN}{MOON}'
+             f'<span class="t-light">Light</span>'
+             f'<span class="t-dark">Dark</span></button>')
 
 
 def esc(value) -> str:
     return html.escape(str(value))
+
+
+def pct(value: int) -> str:
+    """Signed percent, but never '+0%' — a sign on zero implies a direction
+    the number does not actually carry."""
+    return f"{value:+d}%" if value else "0%"
+
+
+def plural(n: int, word: str) -> str:
+    return f"{n} {word}" if n == 1 else f"{n} {word}s"
 
 
 def money(n: int) -> str:
@@ -374,9 +433,7 @@ def _topbar(as_of: str, vendor: str) -> str:
         f'<span class="wordmark">Vital<span>Point</span></span></a>'
         f'<span class="spacer"></span>'
         f'<span class="asof">As of {esc(as_of)}</span>'
-        f'<button class="icon-btn" onclick="rrbToggle()" '
-        f'aria-label="Toggle theme">{SUN}</button>'
-        f'</div></div>')
+        f'{THEME_BTN}</div></div>')
 
 
 def page(title: str, body: str, as_of: str, vendor: str,
@@ -443,12 +500,13 @@ def dashboard_page(rows, stats, specialties, states, current, vendor, as_of):
         f'Largest ARR</option></select></div>'
         f'<button class="btn" type="submit">Apply</button>'
         f'<a class="btn ghost" href="/">Reset</a>'
-        f'<div class="count"><b>{len(rows)}</b> accounts shown</div></form>')
+        f'<div class="count"><b>{len(rows)}</b> '
+        f'{"account" if len(rows) == 1 else "accounts"} shown</div></form>')
 
     if rows:
         trs = []
         for i, r in enumerate(rows):
-            dcls = " down" if r["usage_change"] < 0 else ""
+            dcls = " down" if r["declining"] else ""
             scol = ("var(--high)" if r["sat"] < 40
                     else "var(--med)" if r["sat"] <= 70 else "var(--low)")
             urgent = " urgent" if r["days"] <= 30 else ""
@@ -461,7 +519,7 @@ def dashboard_page(rows, stats, specialties, states, current, vendor, as_of):
                 f'<td><a class="aid" href="/brief/{esc(r["id"])}">'
                 f'{esc(r["id"])}</a></td>'
                 f'<td><div class="trend">{sparkline(r["usage"])}'
-                f'<span class="delta{dcls}">{r["usage_change"]:+d}%</span>'
+                f'<span class="delta{dcls}">{pct(r["usage_change"])}</span>'
                 f'</div></td>'
                 f'<td><div class="sat"><span class="satbar">'
                 f'<i style="width:{r["sat"]}%;background:{scol}"></i></span>'
@@ -536,7 +594,7 @@ def brief_page(acct, b, usage, actions, vendor, as_of):
     lvl = b.risk.level
     tone = {"high": "var(--high)", "medium": "var(--med)",
             "low": "var(--low)"}[lvl]
-    pct = min(100, round(b.risk.points / 60 * 100))
+    meter_pct = min(100, round(b.risk.points / 60 * 100))
     sat = b.satisfaction
     scol = ("var(--high)" if sat.score < 40
             else "var(--med)" if sat.score <= 70 else "var(--low)")
@@ -558,9 +616,9 @@ def brief_page(acct, b, usage, actions, vendor, as_of):
     verdict = (
         f'<div class="card verdict {lvl} stagger" style="animation-delay:60ms">'
         f'<div><div class="lvl">{lvl.upper()} RISK</div>'
-        f'<div class="meta">{b.risk.points} risk points · '
-        f'{b.signals.days_to_renewal} days to renewal</div></div>'
-        f'<div class="meter"><i style="width:{pct}%;background:{tone}"></i>'
+        f'<div class="meta">{plural(b.risk.points, "risk point")} · '
+        f'{plural(b.signals.days_to_renewal, "day")} to renewal</div></div>'
+        f'<div class="meter"><i style="width:{meter_pct}%;background:{tone}"></i>'
         f'</div></div>')
 
     if b.risk.drivers:
@@ -601,7 +659,7 @@ def brief_page(acct, b, usage, actions, vendor, as_of):
         f'<div class="card-head"><h2>Recent history</h2></div>'
         f'<div class="metrics">'
         f'<div class="metric"><div class="k">Usage trend</div>'
-        f'<div class="v">{round(s.usage_change_pct):+d}%</div>'
+        f'<div class="v">{pct(round(s.usage_change_pct))}</div>'
         f'<div class="src">logins, quarter over quarter</div></div>'
         f'<div class="metric"><div class="k">Support load</div>'
         f'<div class="v">{s.avg_tickets_per_month:.1f}</div>'

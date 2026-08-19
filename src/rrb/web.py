@@ -44,9 +44,29 @@ def create_app(db_path: str) -> FastAPI:
                 "('ticket','qbr')", (acct_id,)).fetchall()
             sat = score_satisfaction(docs)
             r = score_risk(sig, sat)
+            # keep the unrounded trend too: a -0.1% decline rounds to 0, and
+            # deciding "is this declining" on the rounded value contradicts
+            # the sparkline, which reads the raw series
             _score_cache[acct_id] = (r.level, r.points, sig.days_to_renewal,
-                                     sat.score, round(sig.usage_change_pct))
+                                     sat.score, sig.usage_change_pct)
         return _score_cache[acct_id]
+
+    def _not_found() -> HTMLResponse:
+        return HTMLResponse(
+            templates.page(
+                "Account not found",
+                '<div class="card empty"><strong>Account not found</strong>'
+                'No account with that identifier is in the book. '
+                '<a href="/">Back to the renewal desk</a>.</div>',
+                AS_OF.isoformat(), VENDOR, "brief-wrap"),
+            status_code=404)
+
+    @app.exception_handler(404)
+    async def _handle_404(request, exc):
+        # a URL like /brief/../x never matches the route (the path converter
+        # rejects the slash), so without this it would fall through to
+        # Starlette's bare JSON error instead of the app's own page
+        return _not_found()
 
     @app.get("/", response_class=HTMLResponse)
     def dashboard(specialty: str = "", state: str = "", risk: str = "",
@@ -63,7 +83,7 @@ def create_app(db_path: str) -> FastAPI:
                     "state": a["state"], "arr": a["arr"],
                     "renewal": a["contract_end"], "days": days,
                     "level": level, "points": points, "sat": sat,
-                    "usage_change": change,
+                    "usage_change": round(change), "declining": change < 0,
                     "usage": usage_by_account.get(a["account_id"], []),
                 })
         finally:
@@ -109,14 +129,7 @@ def create_app(db_path: str) -> FastAPI:
             acct = conn.execute("SELECT * FROM accounts WHERE account_id=?",
                                 (account_id,)).fetchone()
             if acct is None:
-                return HTMLResponse(
-                    templates.page(
-                        "Account not found",
-                        '<div class="card empty"><strong>Account not found</strong>'
-                        'No account with that identifier is in the book. '
-                        '<a href="/">Back to the renewal desk</a>.</div>',
-                        AS_OF.isoformat(), VENDOR, "brief-wrap"),
-                    status_code=404)
+                return _not_found()
             b = build_brief(conn, index, account_id)
         finally:
             conn.close()
