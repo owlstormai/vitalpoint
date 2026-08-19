@@ -3,7 +3,7 @@ import statistics
 from collections import defaultdict
 
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
 
 from rrb import templates
 from rrb.brief import ACTIONS, build_brief
@@ -70,6 +70,14 @@ def create_app(db_path: str, read_only: bool = False) -> FastAPI:
         # rejects the slash), so without this it would fall through to
         # Starlette's bare JSON error instead of the app's own page
         return _not_found()
+
+    @app.get("/favicon.svg", include_in_schema=False)
+    def favicon():
+        # Vercel promotes public/favicon.svg to the CDN, so this route mainly
+        # serves local development — but it keeps the icon working anywhere
+        # the app runs, with no static-files mount.
+        return Response(templates.FAVICON_SVG, media_type="image/svg+xml",
+                        headers={"Cache-Control": "public, max-age=86400"})
 
     @app.get("/", response_class=HTMLResponse)
     def dashboard(specialty: str = "", state: str = "", risk: str = "",

@@ -355,6 +355,18 @@ THEME_JS = """
 })();
 """
 
+# The tab icon is the same mark as the in-app logo: the pulse glyph on the
+# brand teal. Defined here so the app and the static file served to browsers
+# cannot drift apart (tests/test_favicon.py asserts they match).
+FAVICON_SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" '
+    'width="32" height="32" role="img" aria-label="VitalPoint">'
+    '<rect width="32" height="32" rx="7" fill="#0d6e66"/>'
+    '<path d="M5 16h4.4l2.75-7.7 5.5 15.4 2.75-7.7H27" fill="none" '
+    'stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" '
+    'stroke-linejoin="round"/></svg>'
+)
+
 LOGO = ('<span class="logo"><svg width="17" height="17" viewBox="0 0 24 24" '
         'fill="none" stroke="currentColor" stroke-width="2.4" '
         'stroke-linecap="round" '
@@ -442,6 +454,7 @@ def page(title: str, body: str, as_of: str, vendor: str,
         f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
         f'<meta name="viewport" content="width=device-width,initial-scale=1">'
         f'<title>{esc(title)}</title>'
+        f'<link rel="icon" type="image/svg+xml" href="/favicon.svg">'
         f'<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         f'<link rel="stylesheet" href="{FONTS}">'
         f'<style>{CSS}</style><script>{THEME_JS}</script></head><body>'
