@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.12, uv, sqlite3 (stdlib), scikit-learn (TF-IDF), PyYAML, FastAPI + uvicorn, pytest, optional `anthropic`.
 
-**Conventions for every task:** run commands from the repo root `/Users/wojnickiphd/claude/GIthubProjects/renewal-risk-brief`. The venv python is `.venv/bin/python`; pytest is `.venv/bin/python -m pytest`. Commit after every green test run. The dataset "today" is the constant `AS_OF = 2026-08-01`.
+**Conventions for every task:** run commands from the repo root `/Users/wojnickiphd/claude/GIthubProjects/vitalpoint`. The venv python is `.venv/bin/python`; pytest is `.venv/bin/python -m pytest`. Commit after every green test run. The dataset "today" is the constant `AS_OF = 2026-08-01`.
 
 ---
 
