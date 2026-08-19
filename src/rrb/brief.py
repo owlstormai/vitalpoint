@@ -69,6 +69,9 @@ class Brief:
     signals: Signals
     citations: list[Citation] = field(default_factory=list)
     unknowns: list[str] = field(default_factory=list)
+    # driver key -> the citation that evidences it, so views can render the
+    # claim and its proof together instead of re-parsing the markdown
+    driver_evidence: dict[str, Citation] = field(default_factory=dict)
 
 
 def _detect_narrative_drivers(scope: AccountScope):
@@ -110,6 +113,7 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
 
     citations: list[Citation] = []
     unknowns: list[str] = []
+    driver_evidence: dict[str, Citation] = {}
     if not sig.has_qbr_docs:
         unknowns.append("qbr_notes")
     if not sig.has_tickets:
@@ -130,8 +134,10 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
             if d.key == "negative_sentiment" and sat.quotes:
                 # the sentiment quotes ARE the evidence for this driver
                 q = sat.quotes[0]
-                citations.append(Citation(doc_id=q.doc_id, title=q.title,
-                                          doc_date=q.doc_date, excerpt=q.text))
+                cit = Citation(doc_id=q.doc_id, title=q.title,
+                               doc_date=q.doc_date, excerpt=q.text)
+                citations.append(cit)
+                driver_evidence[d.key] = cit
                 lines.append(
                     f"- **{d.key}** — {d.detail}. "
                     f"Evidence: “{q.text}” ({q.title}, {q.doc_date})")
@@ -145,9 +151,10 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
                 c = hit.chunk if hit else None
             if c is not None:
                 excerpt = c.text[:180]
-                citations.append(Citation(
-                    doc_id=c.doc_id, title=c.title, doc_date=c.doc_date,
-                    excerpt=excerpt))
+                cit = Citation(doc_id=c.doc_id, title=c.title,
+                               doc_date=c.doc_date, excerpt=excerpt)
+                citations.append(cit)
+                driver_evidence[d.key] = cit
                 lines.append(
                     f"- **{d.key}** — {d.detail}. "
                     f"Evidence: “{excerpt}…” ({c.title}, {c.doc_date})")
@@ -191,4 +198,4 @@ def build_brief(conn, index: HybridIndex, account_id: str) -> Brief:
 
     return Brief(account_id=account_id, markdown="\n".join(lines), risk=risk,
                  satisfaction=sat, signals=sig, citations=citations,
-                 unknowns=unknowns)
+                 unknowns=unknowns, driver_evidence=driver_evidence)

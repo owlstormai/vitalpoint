@@ -1,93 +1,129 @@
-import html
+"""FastAPI routes. Data assembly only — all markup lives in templates.py."""
+import statistics
+from collections import defaultdict
 
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
-from rrb.brief import build_brief
+from rrb import templates
+from rrb.brief import ACTIONS, build_brief
 from rrb.chunker import chunk_documents
 from rrb.db import connect
+from rrb.generator import AS_OF, VENDOR
 from rrb.index import HybridIndex
 from rrb.scoring import score_risk
 from rrb.sentiment import score_satisfaction
 from rrb.signals import compute_signals
 
-PAGE = """<!doctype html><html><head><title>Renewal Risk Briefs</title>
-<style>body{{font-family:system-ui;margin:2rem;max-width:70rem}}
-table{{border-collapse:collapse;width:100%}}td,th{{padding:.4rem .6rem;
-border-bottom:1px solid #ddd;text-align:left}}
-.high{{color:#b00020;font-weight:600}}.medium{{color:#b06a00}}
-.low{{color:#1b7a2f}}pre{{white-space:pre-wrap}}</style></head>
-<body>{body}</body></html>"""
+RISK_ORDER = {"high": 0, "medium": 1, "low": 2}
+HEALTHY_ACTION = "Confirm the renewal and send a thank-you note."
 
 
 def create_app(db_path: str) -> FastAPI:
     app = FastAPI()
-    boot_conn = connect(db_path)
-    index = HybridIndex(chunk_documents(boot_conn))
-    boot_conn.close()
-    _risk_cache: dict[str, tuple] = {}
 
-    # sqlite connections are not safe for concurrent use across request
-    # threads — each request opens its own.
-    def _risk(conn, acct_id: str):
-        if acct_id not in _risk_cache:
+    # Built once at boot: chunking and indexing the whole corpus is the only
+    # expensive step, and the dataset is static while the server runs.
+    boot = connect(db_path)
+    index = HybridIndex(chunk_documents(boot))
+    usage_by_account: dict[str, list[int]] = defaultdict(list)
+    for r in boot.execute(
+            "SELECT account_id, logins FROM usage_metrics ORDER BY month"):
+        usage_by_account[r["account_id"]].append(r["logins"])
+    boot.close()
+
+    # sqlite connections are not safe across request threads, so each request
+    # opens its own; scored rows are cached since the dataset is static.
+    _score_cache: dict[str, tuple] = {}
+
+    def _score(conn, acct_id: str):
+        if acct_id not in _score_cache:
             sig = compute_signals(conn, acct_id)
             docs = conn.execute(
                 "SELECT * FROM documents WHERE account_id=? AND doc_type IN "
                 "('ticket','qbr')", (acct_id,)).fetchall()
-            r = score_risk(sig, score_satisfaction(docs))
-            _risk_cache[acct_id] = (r.level, r.points, sig.days_to_renewal)
-        return _risk_cache[acct_id]
+            sat = score_satisfaction(docs)
+            r = score_risk(sig, sat)
+            _score_cache[acct_id] = (r.level, r.points, sig.days_to_renewal,
+                                     sat.score, round(sig.usage_change_pct))
+        return _score_cache[acct_id]
 
     @app.get("/", response_class=HTMLResponse)
-    def dashboard(specialty: str = "", state: str = "", risk: str = ""):
+    def dashboard(specialty: str = "", state: str = "", risk: str = "",
+                  sort: str = "risk"):
         conn = connect(db_path)
         try:
-            q = "SELECT * FROM accounts WHERE 1=1"
-            params: list = []
-            if specialty:
-                q += " AND specialty=?"; params.append(specialty)
-            if state:
-                q += " AND state=?"; params.append(state)
-            rows = []
-            for a in conn.execute(q + " ORDER BY account_id",
-                                  params).fetchall():
-                level, points, days = _risk(conn, a["account_id"])
-                if risk and level != risk:
-                    continue
-                rows.append((days, level, points, a))
+            all_rows = []
+            for a in conn.execute(
+                    "SELECT * FROM accounts ORDER BY account_id").fetchall():
+                level, points, days, sat, change = _score(conn, a["account_id"])
+                all_rows.append({
+                    "id": a["account_id"], "name": a["name"],
+                    "specialty": a["specialty"], "city": a["city"],
+                    "state": a["state"], "arr": a["arr"],
+                    "renewal": a["contract_end"], "days": days,
+                    "level": level, "points": points, "sat": sat,
+                    "usage_change": change,
+                    "usage": usage_by_account.get(a["account_id"], []),
+                })
         finally:
             conn.close()
-        rows.sort(key=lambda t: ({"high": 0, "medium": 1, "low": 2}[t[1]], t[0]))
-        esc = html.escape
-        trs = "".join(
-            f"<tr><td><a href='/brief/{esc(a['account_id'])}'>"
-            f"{esc(a['account_id'])}</a>"
-            f"</td><td>{esc(a['name'])}</td>"
-            f"<td>{esc(a['specialty'])}</td>"
-            f"<td>{esc(a['city'])}, {esc(a['state'])}</td>"
-            f"<td class='{level}'>{level} ({points})</td>"
-            f"<td>{esc(a['contract_end'])} ({days}d)</td></tr>"
-            for days, level, points, a in rows)
-        body = (f"<h1>Renewal Risk — {len(rows)} accounts</h1>"
-                "<p>Filter: ?specialty=dental · ?state=TX · ?risk=high</p>"
-                "<table><tr><th>Account</th><th>Name</th><th>Specialty</th>"
-                "<th>Location</th><th>Risk</th><th>Renewal</th></tr>"
-                f"{trs}</table>")
-        return PAGE.format(body=body)
+
+        # portfolio stats describe the whole book, not the filtered view
+        stats = {
+            "total": len(all_rows),
+            "high": sum(1 for r in all_rows if r["level"] == "high"),
+            "arr_total": sum(r["arr"] for r in all_rows),
+            "arr_at_risk": sum(r["arr"] for r in all_rows
+                               if r["level"] == "high"),
+            "soon": sum(1 for r in all_rows if r["days"] <= 30),
+            "soon_high": sum(1 for r in all_rows
+                             if r["days"] <= 30 and r["level"] == "high"),
+            "median_sat": round(statistics.median(
+                [r["sat"] for r in all_rows])) if all_rows else 0,
+        }
+
+        rows = [r for r in all_rows
+                if (not specialty or r["specialty"] == specialty)
+                and (not state or r["state"] == state)
+                and (not risk or r["level"] == risk)]
+        if sort == "renewal":
+            rows.sort(key=lambda r: r["days"])
+        elif sort == "arr":
+            rows.sort(key=lambda r: -r["arr"])
+        else:
+            rows.sort(key=lambda r: (RISK_ORDER[r["level"]], r["days"]))
+
+        specialties = sorted({r["specialty"] for r in all_rows})
+        states = sorted({r["state"] for r in all_rows})
+        return templates.dashboard_page(
+            rows, stats, specialties, states,
+            {"specialty": specialty, "state": state, "risk": risk,
+             "sort": sort},
+            VENDOR, AS_OF.isoformat())
 
     @app.get("/brief/{account_id}", response_class=HTMLResponse)
     def brief(account_id: str):
         conn = connect(db_path)
         try:
+            acct = conn.execute("SELECT * FROM accounts WHERE account_id=?",
+                                (account_id,)).fetchone()
+            if acct is None:
+                return HTMLResponse(
+                    templates.page(
+                        "Account not found",
+                        '<div class="card empty"><strong>Account not found</strong>'
+                        'No account with that identifier is in the book. '
+                        '<a href="/">Back to the renewal desk</a>.</div>',
+                        AS_OF.isoformat(), VENDOR, "brief-wrap"),
+                    status_code=404)
             b = build_brief(conn, index, account_id)
-        except KeyError:
-            return HTMLResponse(PAGE.format(body="<h1>Not found</h1>"),
-                                status_code=404)
         finally:
             conn.close()
-        return PAGE.format(
-            body=f"<p><a href='/'>← all accounts</a></p>"
-                 f"<pre>{html.escape(b.markdown)}</pre>")
+        actions = [ACTIONS[d.key] for d in b.risk.drivers
+                   if d.key in ACTIONS] or [HEALTHY_ACTION]
+        return templates.brief_page(
+            acct, b, usage_by_account.get(account_id, []), actions,
+            VENDOR, AS_OF.isoformat())
 
     return app
