@@ -134,10 +134,12 @@ this is the same command CI runs after every `rrb make-data`.
 | Eval | What it measures | Gate |
 |---|---|---|
 | Tenant isolation | Every account's canary phrase queried against every *other* account's scope | `== 0` leaks (zero tolerance) |
+| Isolation positive control | Each canary *is* findable inside its own scope, so zero leaks can't pass vacuously | `== 0` failures (zero tolerance) |
 | Risk accuracy | `build_brief()`'s computed risk level vs. the archetype's planted risk label | `>= 0.75` |
 | Satisfaction accuracy | Computed sentiment label vs. the archetype's planted satisfaction label | `>= 0.75` |
 | Citation faithfulness | Every cited excerpt in a brief appears verbatim in its source document | `== 1.0` |
 | Retrieval recall@5 | Planted evidence document is retrieved in the top 5 hits for its driver's query | `>= 0.75` |
+| Retrieval MRR | Mean reciprocal rank of that evidence document — accounts hold only 3–8 chunks, so recall@5 comes cheap and MRR is the metric that actually grades ranking | `>= 0.7` |
 | Abstention honesty | Accounts with withheld QBR notes are correctly flagged under "What We Don't Know" | `>= 0.9` |
 
 ## Optional: Claude prose upgrade

@@ -59,12 +59,15 @@ class AccountScope:
     def __init__(self, account_id: str, chunks: list[Chunk]):
         self.account_id = account_id
         self._chunks = chunks
-        self._chunk_tokens = [set(_tokens(c.title + " " + c.text))
-                               for c in chunks]
-        self._bm25 = _BM25([_tokens(c.text) for c in chunks])
+        # Rank over title + body: document titles ("Overcharged on last
+        # invoice") are the most discriminative signal in this corpus, and
+        # scoring them keeps ranking consistent with matched_terms below.
+        searchable = [c.title + " " + c.text for c in chunks]
+        self._chunk_tokens = [set(_tokens(s)) for s in searchable]
+        self._bm25 = _BM25([_tokens(s) for s in searchable])
         self._vec = TfidfVectorizer()
         try:
-            self._mat = self._vec.fit_transform([c.text for c in chunks])
+            self._mat = self._vec.fit_transform(searchable)
         except ValueError:
             # sklearn raises when the chunk set has an empty vocabulary
             # (e.g. a single chunk like "N/A" with no usable tokens). Degrade

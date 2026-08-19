@@ -22,6 +22,10 @@ GATES = {
     "satisfaction_accuracy": 0.75,
     "citation_faithfulness": 1.0,
     "recall_at_5": 0.75,
+    # Accounts hold only 3-8 chunks each, so a k=5 retrieval often returns the
+    # whole scope and recall@5 comes cheap. MRR grades by RANK, so it stays
+    # honest about whether the planted evidence actually surfaces first.
+    "mrr": 0.7,
     "abstention_accuracy": 0.9,
 }
 
@@ -32,10 +36,17 @@ def run_evals(db_path: str, labels_path: str) -> dict:
     index = HybridIndex(chunk_documents(conn))
     ids = list(labels)
 
-    # 1. tenant isolation: query every scope with every OTHER account's canary
+    # 1. tenant isolation: query every scope with every OTHER account's canary.
+    # The positive control matters as much as the leak count: a retrieve() that
+    # silently returned nothing would score zero leaks and pass vacuously, so
+    # every canary must first prove it IS findable inside its own scope.
     leaks = 0
+    control_failures = 0
     for victim in ids:
         canary = labels[victim]["canary"]
+        own = index.for_account(victim).retrieve(canary, k=5)
+        if not any(canary in h.chunk.text for h in own):
+            control_failures += 1
         for attacker in ids:
             if attacker == victim:
                 continue
@@ -77,27 +88,33 @@ def run_evals(db_path: str, labels_path: str) -> dict:
         if ("qbr_notes" in b.unknowns) == expected_unknown:
             abst_ok += 1
 
-    # 5. retrieval recall@5 on planted evidence
+    # 5. retrieval quality on planted evidence: recall@5 and MRR
     rec_total = rec_ok = 0
+    reciprocal_ranks = 0.0
     for acct_id, lab in labels.items():
         scope = index.for_account(acct_id)
         for driver, doc_id in lab["evidence"].items():
             rec_total += 1
             hits = scope.retrieve(DRIVER_QUERIES[driver], k=5)
-            if any(h.chunk.doc_id == doc_id for h in hits):
+            rank = next((i for i, h in enumerate(hits, 1)
+                         if h.chunk.doc_id == doc_id), None)
+            if rank is not None:
                 rec_ok += 1
+                reciprocal_ranks += 1.0 / rank
 
     n = len(ids)
     report = {
         "accounts": n,
         "isolation_leaks": leaks,
+        "isolation_control_failures": control_failures,
         "risk_accuracy": round(risk_ok / n, 3),
         "satisfaction_accuracy": round(sat_ok / max(sat_n, 1), 3),
         "citation_faithfulness": round(cit_ok / max(cit_total, 1), 3),
         "recall_at_5": round(rec_ok / max(rec_total, 1), 3),
+        "mrr": round(reciprocal_ranks / max(rec_total, 1), 3),
         "abstention_accuracy": round(abst_ok / n, 3),
     }
-    report["passed"] = leaks == 0 and all(
+    report["passed"] = leaks == 0 and control_failures == 0 and all(
         report[k] >= v for k, v in GATES.items())
     # underscore-prefixed: per-archetype detail for confusion printing on
     # failure, not part of the public report contract.
