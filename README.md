@@ -3,6 +3,11 @@
 **One-page, fully-cited renewal risk briefs for 300 synthetic SMB medical
 practices — with CI-gated tenant isolation.**
 
+The scenario: you are *VitalPoint Software*, a fictional vendor selling
+practice-management software to 300 small medical practices — dental, family
+medicine, pediatrics, physical therapy and more, spread across the US — and
+renewal season is coming.
+
 `rrb` turns raw account data — contracts, usage metrics, support tickets,
 QBR (Quarterly Business Review) notes — into a one-page brief that tells a
 customer success manager exactly why an account is at risk of not renewing,

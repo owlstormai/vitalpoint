@@ -9,6 +9,10 @@ from rrb.archetypes import ARCHETYPES
 AS_OF = date(2026, 8, 1)
 N_MONTHS = 15
 
+# The fictional vendor whose renewal book this dataset represents: a practice-
+# management software company selling to small medical practices.
+VENDOR = "VitalPoint Software"
+
 CANARY_WORDS = [
     "walrus", "quasar", "bassoon", "glacier", "topaz", "merlot", "falcon",
     "nimbus", "juniper", "cobalt", "saffron", "obsidian", "tundra", "lyric",
@@ -155,8 +159,9 @@ def _gen_documents(conn, rng, acct: dict, lab: dict) -> None:
         return doc_id
 
     # contract excerpt — canary lives here so every account carries one
-    body = (f"Contract excerpt for {acct['name']} ({acct['specialty']}, "
-            f"{acct['city']}, {acct['state']}).\n\n{arch.clause}\n\n"
+    body = (f"Contract excerpt: {VENDOR} and {acct['name']} "
+            f"({acct['specialty']}, {acct['city']}, {acct['state']}).\n\n"
+            f"{arch.clause}\n\n"
             f"Current term (renewal of prior term): {acct['contract_start']} "
             f"through {acct['contract_end']}. "
             f"Annual fee ${acct['arr']:,} for {acct['seats']} seats. "
