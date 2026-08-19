@@ -159,6 +159,10 @@ scripts/make_dataset.py  (or `rrb make-data`)
   brief`    `rrb serve`    → JSON for CRM     (optional Claude
             dashboard +      delivery          prose upgrade,
             brief pages                        same citations)
+                │
+                ▼
+        api/index.py — module-level ASGI `app`
+        (Vercel entrypoint; read-only SQLite)
 
                      ▲
                      │ scores the whole pipeline against
@@ -182,6 +186,54 @@ scripts/make_dataset.py  (or `rrb make-data`)
 | `export.py` | JSON serialization for downstream systems |
 | `web.py` / `templates.py` | FastAPI routes / all presentation markup |
 | `llm.py` | Optional Claude rewrite behind a citation-preserving contract |
+
+## Architecture software
+
+| Layer | Software | Why this one |
+|---|---|---|
+| Language | **Python 3.12** | Standard library carries most of the weight here — `sqlite3`, `re`, `math`, `dataclasses` |
+| Web framework | **FastAPI** on **Uvicorn** | ASGI app that deploys as a single serverless function without modification |
+| Storage | **SQLite** (stdlib `sqlite3`) | The system of record. One file, zero operational surface, opened read-only in production |
+| Retrieval | **Hand-written BM25 + TF-IDF**, fused with reciprocal-rank fusion | See below — the ML libraries were removed on purpose |
+| Presentation | **Server-rendered HTML + CSS custom properties**, no JS framework | ~40 lines of vanilla JS for the theme toggle; nothing to build, bundle, or hydrate |
+| Config & labels | **PyYAML** | Golden ground-truth labels |
+| Tests | **pytest** | 58 tests, no network, no API keys |
+| CI | **GitHub Actions** | Installs clean, rebuilds the dataset, runs the eval gates on every push |
+| Hosting | **Vercel** Python runtime | One Vercel Function; the dataset ships with it |
+| Optional LLM | **Anthropic Claude** (`claude-sonnet-5`) | Prose rewrite only, behind a citation-preserving contract |
+
+### On dependency weight
+
+The dense retrieval leg originally used scikit-learn's `TfidfVectorizer`. That
+pulled in scikit-learn, scipy and numpy — **about 140 MB** — to vectorize, at
+most, **eight short documents per account**, because retrieval is scoped to a
+single tenant and each account holds only 3–8 chunks.
+
+That is not a trade worth making, so TF-IDF is now ~20 lines of Python
+reproducing scikit-learn's defaults exactly: smooth IDF, raw term counts,
+L2-normalized vectors, and cosine similarity as a sparse dict product. The
+results held up — retrieval MRR went *up* slightly (0.732 → 0.756) and every
+eval gate still passes — while the install dropped from ~160 MB to **19 MB**
+and the test suite got about 3× faster. BM25 was already hand-written, so the
+whole retrieval stack is now dependency-free and readable end to end.
+
+## Deployment
+
+The app deploys to Vercel as a single Python function, with no build step:
+
+- `api/index.py` exports a module-level `app`, and `pyproject.toml` points at
+  it explicitly via `[tool.vercel] entrypoint = "api.index:app"`.
+- `data/rrb.sqlite` is **committed to the repository**. The demo is a fixed,
+  deterministic snapshot, so shipping the 1.3 MB file beats regenerating it on
+  every cold start.
+- SQLite is opened **read-only** (`mode=ro`), because a serverless filesystem
+  is read-only and a normal open can fail when SQLite tries to place a journal
+  beside the database file.
+- Retrieval structures are built once per cold start and cached; per-account
+  scopes are built lazily on first access.
+
+For local development, `rrb serve` runs the same app read-write against a
+dataset you generate yourself.
 
 ## Delivering briefs to a CRM
 

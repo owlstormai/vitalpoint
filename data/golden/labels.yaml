@@ -1,0 +1,3078 @@
+acct_0000:
+  archetype: onboarding_stuck
+  canary: internal ref onyx-tundra-0000
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0000_002
+    onboarding_incomplete: doc_0000_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0001:
+  archetype: usage_declining
+  canary: internal ref topaz-ember-0001
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0001_004
+    usage_decline: doc_0001_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0002:
+  archetype: healthy_quiet
+  canary: internal ref bassoon-nimbus-0002
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0003:
+  archetype: silent_churn
+  canary: internal ref saffron-bassoon-0003
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0003_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0004:
+  archetype: support_burned
+  canary: internal ref tundra-merlot-0004
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0004_001
+    unresolved_tickets: doc_0004_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0005:
+  archetype: price_sensitive
+  canary: internal ref ember-harbor-0005
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0005_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0006:
+  archetype: champion_left
+  canary: internal ref tundra-juniper-0006
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0006_001
+    usage_decline: doc_0006_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0007:
+  archetype: healthy_quiet
+  canary: internal ref topaz-lyric-0007
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0008:
+  archetype: stable_low_touch
+  canary: internal ref merlot-falcon-0008
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0009:
+  archetype: healthy_quiet
+  canary: internal ref nimbus-merlot-0009
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0010:
+  archetype: stable_low_touch
+  canary: internal ref merlot-onyx-0010
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0011:
+  archetype: expansion_candidate
+  canary: internal ref bassoon-juniper-0011
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0011_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0012:
+  archetype: champion_left
+  canary: internal ref bassoon-lyric-0012
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0012_001
+    usage_decline: doc_0012_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0013:
+  archetype: support_burned
+  canary: internal ref obsidian-zephyr-0013
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0013_001
+    unresolved_tickets: doc_0013_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0014:
+  archetype: healthy_quiet
+  canary: internal ref bassoon-prairie-0014
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0015:
+  archetype: billing_dispute
+  canary: internal ref bassoon-topaz-0015
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0015_001
+  risk: medium
+  satisfaction: frustrated
+  withheld:
+  - qbr_notes
+acct_0016:
+  archetype: price_sensitive
+  canary: internal ref walrus-saffron-0016
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0016_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0017:
+  archetype: stable_low_touch
+  canary: internal ref obsidian-cobalt-0017
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0018:
+  archetype: feature_gap_shopper
+  canary: internal ref falcon-nimbus-0018
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0018_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0019:
+  archetype: billing_dispute
+  canary: internal ref bassoon-walrus-0019
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0019_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0020:
+  archetype: billing_dispute
+  canary: internal ref saffron-merlot-0020
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0020_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0021:
+  archetype: onboarding_stuck
+  canary: internal ref cobalt-tundra-0021
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0021_002
+    onboarding_incomplete: doc_0021_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0022:
+  archetype: feature_gap_shopper
+  canary: internal ref tundra-topaz-0022
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0022_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0023:
+  archetype: feature_gap_shopper
+  canary: internal ref topaz-saffron-0023
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0023_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0024:
+  archetype: onboarding_stuck
+  canary: internal ref fjord-nimbus-0024
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0024_002
+    onboarding_incomplete: doc_0024_001
+  risk: high
+  satisfaction: frustrated
+  withheld:
+  - qbr_notes
+acct_0025:
+  archetype: silent_churn
+  canary: internal ref fjord-harbor-0025
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0025_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0026:
+  archetype: feature_gap_shopper
+  canary: internal ref fjord-harbor-0026
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0026_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0027:
+  archetype: billing_dispute
+  canary: internal ref onyx-saffron-0027
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0027_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0028:
+  archetype: usage_declining
+  canary: internal ref prairie-falcon-0028
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0028_004
+    usage_decline: doc_0028_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0029:
+  archetype: silent_churn
+  canary: internal ref quasar-bassoon-0029
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0029_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0030:
+  archetype: onboarding_stuck
+  canary: internal ref walrus-juniper-0030
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0030_002
+    onboarding_incomplete: doc_0030_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0031:
+  archetype: usage_declining
+  canary: internal ref tundra-saffron-0031
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0031_004
+    usage_decline: doc_0031_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0032:
+  archetype: stable_low_touch
+  canary: internal ref zephyr-bassoon-0032
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0033:
+  archetype: champion_left
+  canary: internal ref falcon-prairie-0033
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0033_001
+    usage_decline: doc_0033_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0034:
+  archetype: feature_gap_shopper
+  canary: internal ref zephyr-obsidian-0034
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0034_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0035:
+  archetype: healthy_quiet
+  canary: internal ref bassoon-prairie-0035
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0036:
+  archetype: price_sensitive
+  canary: internal ref lyric-topaz-0036
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0036_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0037:
+  archetype: champion_left
+  canary: internal ref merlot-ember-0037
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0037_001
+    usage_decline: doc_0037_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0038:
+  archetype: usage_declining
+  canary: internal ref fjord-obsidian-0038
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0038_004
+    usage_decline: doc_0038_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0039:
+  archetype: feature_gap_shopper
+  canary: internal ref ember-quasar-0039
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0039_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0040:
+  archetype: usage_declining
+  canary: internal ref topaz-glacier-0040
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0040_004
+    usage_decline: doc_0040_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0041:
+  archetype: healthy_quiet
+  canary: internal ref obsidian-onyx-0041
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0042:
+  archetype: silent_churn
+  canary: internal ref saffron-merlot-0042
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0042_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0043:
+  archetype: onboarding_stuck
+  canary: internal ref falcon-prairie-0043
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0043_002
+    onboarding_incomplete: doc_0043_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0044:
+  archetype: usage_declining
+  canary: internal ref onyx-topaz-0044
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0044_004
+    usage_decline: doc_0044_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0045:
+  archetype: billing_dispute
+  canary: internal ref obsidian-quasar-0045
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0045_001
+  risk: medium
+  satisfaction: frustrated
+  withheld:
+  - qbr_notes
+acct_0046:
+  archetype: feature_gap_shopper
+  canary: internal ref ember-bassoon-0046
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0046_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0047:
+  archetype: onboarding_stuck
+  canary: internal ref saffron-fjord-0047
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0047_002
+    onboarding_incomplete: doc_0047_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0048:
+  archetype: healthy_quiet
+  canary: internal ref topaz-lyric-0048
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0049:
+  archetype: usage_declining
+  canary: internal ref ember-lyric-0049
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0049_001
+  risk: high
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0050:
+  archetype: usage_declining
+  canary: internal ref onyx-harbor-0050
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0050_004
+    usage_decline: doc_0050_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0051:
+  archetype: price_sensitive
+  canary: internal ref fjord-quasar-0051
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0051_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0052:
+  archetype: usage_declining
+  canary: internal ref falcon-juniper-0052
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0052_004
+    usage_decline: doc_0052_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0053:
+  archetype: champion_left
+  canary: internal ref cobalt-ember-0053
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0053_001
+    usage_decline: doc_0053_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0054:
+  archetype: stable_low_touch
+  canary: internal ref falcon-lyric-0054
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0055:
+  archetype: champion_left
+  canary: internal ref obsidian-falcon-0055
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0055_001
+    usage_decline: doc_0055_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0056:
+  archetype: silent_churn
+  canary: internal ref prairie-bassoon-0056
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0056_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0057:
+  archetype: stable_low_touch
+  canary: internal ref quasar-prairie-0057
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0058:
+  archetype: usage_declining
+  canary: internal ref bassoon-falcon-0058
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0058_004
+    usage_decline: doc_0058_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0059:
+  archetype: onboarding_stuck
+  canary: internal ref saffron-zephyr-0059
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0059_002
+    onboarding_incomplete: doc_0059_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0060:
+  archetype: stable_low_touch
+  canary: internal ref nimbus-falcon-0060
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0061:
+  archetype: silent_churn
+  canary: internal ref juniper-merlot-0061
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0061_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0062:
+  archetype: healthy_quiet
+  canary: internal ref falcon-lyric-0062
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0063:
+  archetype: feature_gap_shopper
+  canary: internal ref juniper-tundra-0063
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0063_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0064:
+  archetype: silent_churn
+  canary: internal ref onyx-lyric-0064
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0064_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0065:
+  archetype: healthy_quiet
+  canary: internal ref falcon-saffron-0065
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0066:
+  archetype: price_sensitive
+  canary: internal ref merlot-juniper-0066
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0066_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0067:
+  archetype: healthy_quiet
+  canary: internal ref prairie-obsidian-0067
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0068:
+  archetype: billing_dispute
+  canary: internal ref lyric-saffron-0068
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0068_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0069:
+  archetype: billing_dispute
+  canary: internal ref tundra-topaz-0069
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0069_001
+  risk: medium
+  satisfaction: frustrated
+  withheld:
+  - qbr_notes
+acct_0070:
+  archetype: healthy_quiet
+  canary: internal ref fjord-juniper-0070
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0071:
+  archetype: onboarding_stuck
+  canary: internal ref juniper-topaz-0071
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0071_002
+    onboarding_incomplete: doc_0071_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0072:
+  archetype: onboarding_stuck
+  canary: internal ref bassoon-fjord-0072
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0072_002
+    onboarding_incomplete: doc_0072_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0073:
+  archetype: stable_low_touch
+  canary: internal ref glacier-lyric-0073
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0074:
+  archetype: usage_declining
+  canary: internal ref falcon-walrus-0074
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0074_004
+    usage_decline: doc_0074_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0075:
+  archetype: price_sensitive
+  canary: internal ref falcon-fjord-0075
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0075_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0076:
+  archetype: stable_low_touch
+  canary: internal ref falcon-zephyr-0076
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0077:
+  archetype: healthy_quiet
+  canary: internal ref harbor-merlot-0077
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0078:
+  archetype: usage_declining
+  canary: internal ref cobalt-lyric-0078
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0078_004
+    usage_decline: doc_0078_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0079:
+  archetype: feature_gap_shopper
+  canary: internal ref bassoon-fjord-0079
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0079_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0080:
+  archetype: outage_affected
+  canary: internal ref fjord-quasar-0080
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0080_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0081:
+  archetype: onboarding_stuck
+  canary: internal ref ember-prairie-0081
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0081_002
+    onboarding_incomplete: doc_0081_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0082:
+  archetype: expansion_candidate
+  canary: internal ref quasar-nimbus-0082
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0082_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0083:
+  archetype: billing_dispute
+  canary: internal ref quasar-falcon-0083
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0083_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0084:
+  archetype: billing_dispute
+  canary: internal ref topaz-onyx-0084
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0084_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0085:
+  archetype: stable_low_touch
+  canary: internal ref obsidian-quasar-0085
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0086:
+  archetype: price_sensitive
+  canary: internal ref saffron-lyric-0086
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0086_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0087:
+  archetype: stable_low_touch
+  canary: internal ref cobalt-ember-0087
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0088:
+  archetype: feature_gap_shopper
+  canary: internal ref cobalt-ember-0088
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0088_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0089:
+  archetype: onboarding_stuck
+  canary: internal ref nimbus-cobalt-0089
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0089_002
+    onboarding_incomplete: doc_0089_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0090:
+  archetype: onboarding_stuck
+  canary: internal ref bassoon-obsidian-0090
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0090_002
+    onboarding_incomplete: doc_0090_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0091:
+  archetype: champion_left
+  canary: internal ref tundra-ember-0091
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0091_001
+    usage_decline: doc_0091_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0092:
+  archetype: silent_churn
+  canary: internal ref saffron-onyx-0092
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0092_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0093:
+  archetype: expansion_candidate
+  canary: internal ref quasar-fjord-0093
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0093_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0094:
+  archetype: expansion_candidate
+  canary: internal ref tundra-nimbus-0094
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0094_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0095:
+  archetype: healthy_quiet
+  canary: internal ref ember-prairie-0095
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0096:
+  archetype: healthy_quiet
+  canary: internal ref obsidian-merlot-0096
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0097:
+  archetype: feature_gap_shopper
+  canary: internal ref glacier-saffron-0097
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0097_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0098:
+  archetype: silent_churn
+  canary: internal ref glacier-saffron-0098
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0098_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0099:
+  archetype: silent_churn
+  canary: internal ref prairie-topaz-0099
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0099_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0100:
+  archetype: billing_dispute
+  canary: internal ref prairie-ember-0100
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0100_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0101:
+  archetype: stable_low_touch
+  canary: internal ref walrus-lyric-0101
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0102:
+  archetype: price_sensitive
+  canary: internal ref fjord-glacier-0102
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0102_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0103:
+  archetype: healthy_quiet
+  canary: internal ref bassoon-saffron-0103
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0104:
+  archetype: outage_affected
+  canary: internal ref harbor-glacier-0104
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0104_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0105:
+  archetype: usage_declining
+  canary: internal ref bassoon-quasar-0105
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0105_004
+    usage_decline: doc_0105_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0106:
+  archetype: stable_low_touch
+  canary: internal ref quasar-ember-0106
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0107:
+  archetype: stable_low_touch
+  canary: internal ref harbor-bassoon-0107
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0108:
+  archetype: silent_churn
+  canary: internal ref saffron-walrus-0108
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0108_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0109:
+  archetype: champion_left
+  canary: internal ref topaz-bassoon-0109
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0109_001
+    usage_decline: doc_0109_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0110:
+  archetype: silent_churn
+  canary: internal ref nimbus-saffron-0110
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0110_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0111:
+  archetype: outage_affected
+  canary: internal ref falcon-ember-0111
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0111_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0112:
+  archetype: outage_affected
+  canary: internal ref prairie-bassoon-0112
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0112_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0113:
+  archetype: support_burned
+  canary: internal ref cobalt-falcon-0113
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0113_001
+    unresolved_tickets: doc_0113_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0114:
+  archetype: usage_declining
+  canary: internal ref nimbus-merlot-0114
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0114_004
+    usage_decline: doc_0114_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0115:
+  archetype: stable_low_touch
+  canary: internal ref quasar-fjord-0115
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0116:
+  archetype: usage_declining
+  canary: internal ref topaz-saffron-0116
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0116_004
+    usage_decline: doc_0116_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0117:
+  archetype: onboarding_stuck
+  canary: internal ref bassoon-cobalt-0117
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0117_002
+    onboarding_incomplete: doc_0117_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0118:
+  archetype: healthy_quiet
+  canary: internal ref onyx-merlot-0118
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0119:
+  archetype: champion_left
+  canary: internal ref walrus-quasar-0119
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0119_001
+    usage_decline: doc_0119_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0120:
+  archetype: usage_declining
+  canary: internal ref tundra-cobalt-0120
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0120_004
+    usage_decline: doc_0120_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0121:
+  archetype: support_burned
+  canary: internal ref ember-cobalt-0121
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0121_001
+    unresolved_tickets: doc_0121_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0122:
+  archetype: healthy_quiet
+  canary: internal ref glacier-saffron-0122
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0123:
+  archetype: stable_low_touch
+  canary: internal ref topaz-cobalt-0123
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0124:
+  archetype: outage_affected
+  canary: internal ref harbor-merlot-0124
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0124_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0125:
+  archetype: healthy_quiet
+  canary: internal ref obsidian-glacier-0125
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0126:
+  archetype: expansion_candidate
+  canary: internal ref glacier-lyric-0126
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0126_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0127:
+  archetype: champion_left
+  canary: internal ref lyric-nimbus-0127
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0127_001
+    usage_decline: doc_0127_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0128:
+  archetype: silent_churn
+  canary: internal ref juniper-zephyr-0128
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0128_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0129:
+  archetype: silent_churn
+  canary: internal ref quasar-nimbus-0129
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0129_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0130:
+  archetype: usage_declining
+  canary: internal ref lyric-nimbus-0130
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0130_004
+    usage_decline: doc_0130_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0131:
+  archetype: price_sensitive
+  canary: internal ref glacier-obsidian-0131
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0131_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0132:
+  archetype: expansion_candidate
+  canary: internal ref glacier-quasar-0132
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0132_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0133:
+  archetype: healthy_quiet
+  canary: internal ref nimbus-lyric-0133
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0134:
+  archetype: support_burned
+  canary: internal ref merlot-onyx-0134
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0134_001
+    unresolved_tickets: doc_0134_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0135:
+  archetype: outage_affected
+  canary: internal ref harbor-topaz-0135
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0135_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0136:
+  archetype: stable_low_touch
+  canary: internal ref harbor-fjord-0136
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0137:
+  archetype: outage_affected
+  canary: internal ref tundra-juniper-0137
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0137_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0138:
+  archetype: outage_affected
+  canary: internal ref quasar-fjord-0138
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0138_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0139:
+  archetype: stable_low_touch
+  canary: internal ref walrus-harbor-0139
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0140:
+  archetype: usage_declining
+  canary: internal ref harbor-glacier-0140
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0140_004
+    usage_decline: doc_0140_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0141:
+  archetype: feature_gap_shopper
+  canary: internal ref merlot-juniper-0141
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0141_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0142:
+  archetype: champion_left
+  canary: internal ref saffron-harbor-0142
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0142_001
+    usage_decline: doc_0142_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0143:
+  archetype: onboarding_stuck
+  canary: internal ref prairie-cobalt-0143
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0143_002
+    onboarding_incomplete: doc_0143_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0144:
+  archetype: champion_left
+  canary: internal ref zephyr-ember-0144
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0144_001
+    usage_decline: doc_0144_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0145:
+  archetype: healthy_quiet
+  canary: internal ref cobalt-quasar-0145
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0146:
+  archetype: onboarding_stuck
+  canary: internal ref zephyr-topaz-0146
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0146_002
+    onboarding_incomplete: doc_0146_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0147:
+  archetype: champion_left
+  canary: internal ref fjord-nimbus-0147
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0147_001
+    usage_decline: doc_0147_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0148:
+  archetype: healthy_quiet
+  canary: internal ref cobalt-obsidian-0148
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0149:
+  archetype: stable_low_touch
+  canary: internal ref walrus-saffron-0149
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0150:
+  archetype: usage_declining
+  canary: internal ref quasar-merlot-0150
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0150_004
+    usage_decline: doc_0150_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0151:
+  archetype: usage_declining
+  canary: internal ref quasar-ember-0151
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0151_004
+    usage_decline: doc_0151_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0152:
+  archetype: price_sensitive
+  canary: internal ref saffron-prairie-0152
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0152_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0153:
+  archetype: price_sensitive
+  canary: internal ref quasar-zephyr-0153
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0153_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0154:
+  archetype: feature_gap_shopper
+  canary: internal ref merlot-cobalt-0154
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0154_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0155:
+  archetype: support_burned
+  canary: internal ref saffron-topaz-0155
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0155_001
+    unresolved_tickets: doc_0155_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0156:
+  archetype: support_burned
+  canary: internal ref ember-walrus-0156
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0156_001
+    unresolved_tickets: doc_0156_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0157:
+  archetype: onboarding_stuck
+  canary: internal ref saffron-prairie-0157
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0157_002
+    onboarding_incomplete: doc_0157_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0158:
+  archetype: healthy_quiet
+  canary: internal ref juniper-harbor-0158
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0159:
+  archetype: support_burned
+  canary: internal ref tundra-ember-0159
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0159_001
+    unresolved_tickets: doc_0159_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0160:
+  archetype: healthy_quiet
+  canary: internal ref juniper-merlot-0160
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0161:
+  archetype: healthy_quiet
+  canary: internal ref lyric-juniper-0161
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0162:
+  archetype: expansion_candidate
+  canary: internal ref topaz-tundra-0162
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0162_001
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0163:
+  archetype: silent_churn
+  canary: internal ref fjord-bassoon-0163
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0163_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0164:
+  archetype: feature_gap_shopper
+  canary: internal ref nimbus-ember-0164
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0164_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0165:
+  archetype: onboarding_stuck
+  canary: internal ref harbor-merlot-0165
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0165_002
+    onboarding_incomplete: doc_0165_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0166:
+  archetype: billing_dispute
+  canary: internal ref prairie-merlot-0166
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0166_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0167:
+  archetype: feature_gap_shopper
+  canary: internal ref juniper-zephyr-0167
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0167_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0168:
+  archetype: expansion_candidate
+  canary: internal ref lyric-walrus-0168
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0168_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0169:
+  archetype: onboarding_stuck
+  canary: internal ref juniper-saffron-0169
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0169_002
+    onboarding_incomplete: doc_0169_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0170:
+  archetype: price_sensitive
+  canary: internal ref onyx-falcon-0170
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0170_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0171:
+  archetype: price_sensitive
+  canary: internal ref obsidian-lyric-0171
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0171_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0172:
+  archetype: expansion_candidate
+  canary: internal ref topaz-ember-0172
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0172_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0173:
+  archetype: usage_declining
+  canary: internal ref juniper-prairie-0173
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0173_004
+    usage_decline: doc_0173_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0174:
+  archetype: support_burned
+  canary: internal ref juniper-walrus-0174
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0174_001
+    unresolved_tickets: doc_0174_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0175:
+  archetype: usage_declining
+  canary: internal ref walrus-zephyr-0175
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0175_004
+    usage_decline: doc_0175_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0176:
+  archetype: support_burned
+  canary: internal ref bassoon-saffron-0176
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0176_001
+    unresolved_tickets: doc_0176_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0177:
+  archetype: usage_declining
+  canary: internal ref glacier-cobalt-0177
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0177_004
+    usage_decline: doc_0177_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0178:
+  archetype: stable_low_touch
+  canary: internal ref bassoon-zephyr-0178
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0179:
+  archetype: price_sensitive
+  canary: internal ref walrus-onyx-0179
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0179_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0180:
+  archetype: billing_dispute
+  canary: internal ref walrus-falcon-0180
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0180_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0181:
+  archetype: healthy_quiet
+  canary: internal ref glacier-topaz-0181
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0182:
+  archetype: billing_dispute
+  canary: internal ref bassoon-harbor-0182
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0182_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0183:
+  archetype: price_sensitive
+  canary: internal ref bassoon-falcon-0183
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0183_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0184:
+  archetype: feature_gap_shopper
+  canary: internal ref falcon-glacier-0184
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0184_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0185:
+  archetype: billing_dispute
+  canary: internal ref nimbus-prairie-0185
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0185_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0186:
+  archetype: billing_dispute
+  canary: internal ref topaz-zephyr-0186
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0186_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0187:
+  archetype: healthy_quiet
+  canary: internal ref fjord-tundra-0187
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0188:
+  archetype: onboarding_stuck
+  canary: internal ref falcon-juniper-0188
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0188_002
+    onboarding_incomplete: doc_0188_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0189:
+  archetype: price_sensitive
+  canary: internal ref walrus-juniper-0189
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0189_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0190:
+  archetype: price_sensitive
+  canary: internal ref prairie-obsidian-0190
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0190_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0191:
+  archetype: price_sensitive
+  canary: internal ref glacier-merlot-0191
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0191_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0192:
+  archetype: healthy_quiet
+  canary: internal ref ember-falcon-0192
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0193:
+  archetype: price_sensitive
+  canary: internal ref zephyr-onyx-0193
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0193_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0194:
+  archetype: outage_affected
+  canary: internal ref onyx-quasar-0194
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0194_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0195:
+  archetype: billing_dispute
+  canary: internal ref tundra-onyx-0195
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0195_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0196:
+  archetype: stable_low_touch
+  canary: internal ref bassoon-glacier-0196
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0197:
+  archetype: price_sensitive
+  canary: internal ref obsidian-walrus-0197
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0197_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0198:
+  archetype: stable_low_touch
+  canary: internal ref prairie-saffron-0198
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0199:
+  archetype: healthy_quiet
+  canary: internal ref ember-juniper-0199
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0200:
+  archetype: support_burned
+  canary: internal ref bassoon-cobalt-0200
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0200_001
+    unresolved_tickets: doc_0200_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0201:
+  archetype: usage_declining
+  canary: internal ref fjord-juniper-0201
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0201_004
+    usage_decline: doc_0201_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0202:
+  archetype: expansion_candidate
+  canary: internal ref merlot-zephyr-0202
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0202_001
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0203:
+  archetype: price_sensitive
+  canary: internal ref fjord-zephyr-0203
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0203_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0204:
+  archetype: price_sensitive
+  canary: internal ref bassoon-fjord-0204
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0204_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0205:
+  archetype: healthy_quiet
+  canary: internal ref bassoon-saffron-0205
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0206:
+  archetype: price_sensitive
+  canary: internal ref fjord-juniper-0206
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0206_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0207:
+  archetype: support_burned
+  canary: internal ref ember-falcon-0207
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0207_001
+    unresolved_tickets: doc_0207_002
+  risk: high
+  satisfaction: frustrated
+  withheld:
+  - qbr_notes
+acct_0208:
+  archetype: price_sensitive
+  canary: internal ref zephyr-onyx-0208
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0208_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0209:
+  archetype: support_burned
+  canary: internal ref walrus-fjord-0209
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0209_001
+    unresolved_tickets: doc_0209_002
+  risk: high
+  satisfaction: frustrated
+  withheld:
+  - qbr_notes
+acct_0210:
+  archetype: price_sensitive
+  canary: internal ref walrus-bassoon-0210
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0210_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0211:
+  archetype: onboarding_stuck
+  canary: internal ref obsidian-topaz-0211
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0211_002
+    onboarding_incomplete: doc_0211_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0212:
+  archetype: support_burned
+  canary: internal ref nimbus-cobalt-0212
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0212_001
+    unresolved_tickets: doc_0212_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0213:
+  archetype: usage_declining
+  canary: internal ref lyric-glacier-0213
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0213_004
+    usage_decline: doc_0213_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0214:
+  archetype: stable_low_touch
+  canary: internal ref harbor-lyric-0214
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0215:
+  archetype: expansion_candidate
+  canary: internal ref glacier-nimbus-0215
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0215_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0216:
+  archetype: outage_affected
+  canary: internal ref tundra-zephyr-0216
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0216_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0217:
+  archetype: usage_declining
+  canary: internal ref bassoon-cobalt-0217
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0217_004
+    usage_decline: doc_0217_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0218:
+  archetype: champion_left
+  canary: internal ref tundra-harbor-0218
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0218_001
+    usage_decline: doc_0218_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0219:
+  archetype: stable_low_touch
+  canary: internal ref prairie-glacier-0219
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0220:
+  archetype: expansion_candidate
+  canary: internal ref saffron-zephyr-0220
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0220_001
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0221:
+  archetype: stable_low_touch
+  canary: internal ref saffron-ember-0221
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0222:
+  archetype: billing_dispute
+  canary: internal ref harbor-tundra-0222
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0222_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0223:
+  archetype: onboarding_stuck
+  canary: internal ref tundra-quasar-0223
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0223_002
+    onboarding_incomplete: doc_0223_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0224:
+  archetype: stable_low_touch
+  canary: internal ref fjord-falcon-0224
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0225:
+  archetype: healthy_quiet
+  canary: internal ref cobalt-merlot-0225
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0226:
+  archetype: healthy_quiet
+  canary: internal ref prairie-quasar-0226
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0227:
+  archetype: silent_churn
+  canary: internal ref walrus-glacier-0227
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0227_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0228:
+  archetype: healthy_quiet
+  canary: internal ref walrus-falcon-0228
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0229:
+  archetype: outage_affected
+  canary: internal ref fjord-onyx-0229
+  drivers:
+  - outage_impact
+  evidence:
+    outage_impact: doc_0229_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0230:
+  archetype: support_burned
+  canary: internal ref onyx-nimbus-0230
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0230_001
+    unresolved_tickets: doc_0230_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0231:
+  archetype: healthy_quiet
+  canary: internal ref walrus-onyx-0231
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0232:
+  archetype: support_burned
+  canary: internal ref topaz-cobalt-0232
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0232_001
+    unresolved_tickets: doc_0232_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0233:
+  archetype: onboarding_stuck
+  canary: internal ref ember-bassoon-0233
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0233_002
+    onboarding_incomplete: doc_0233_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0234:
+  archetype: feature_gap_shopper
+  canary: internal ref topaz-zephyr-0234
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0234_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0235:
+  archetype: price_sensitive
+  canary: internal ref walrus-bassoon-0235
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0235_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0236:
+  archetype: healthy_quiet
+  canary: internal ref tundra-lyric-0236
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0237:
+  archetype: healthy_quiet
+  canary: internal ref walrus-nimbus-0237
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0238:
+  archetype: healthy_quiet
+  canary: internal ref saffron-lyric-0238
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0239:
+  archetype: healthy_quiet
+  canary: internal ref merlot-harbor-0239
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld:
+  - qbr_notes
+acct_0240:
+  archetype: feature_gap_shopper
+  canary: internal ref saffron-topaz-0240
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0240_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0241:
+  archetype: champion_left
+  canary: internal ref glacier-walrus-0241
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0241_001
+    usage_decline: doc_0241_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0242:
+  archetype: silent_churn
+  canary: internal ref harbor-zephyr-0242
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0242_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0243:
+  archetype: price_sensitive
+  canary: internal ref falcon-onyx-0243
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0243_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0244:
+  archetype: stable_low_touch
+  canary: internal ref walrus-cobalt-0244
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0245:
+  archetype: billing_dispute
+  canary: internal ref bassoon-zephyr-0245
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0245_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0246:
+  archetype: price_sensitive
+  canary: internal ref walrus-quasar-0246
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0246_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0247:
+  archetype: healthy_quiet
+  canary: internal ref topaz-bassoon-0247
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0248:
+  archetype: usage_declining
+  canary: internal ref cobalt-harbor-0248
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0248_004
+    usage_decline: doc_0248_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0249:
+  archetype: onboarding_stuck
+  canary: internal ref harbor-nimbus-0249
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0249_002
+    onboarding_incomplete: doc_0249_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0250:
+  archetype: champion_left
+  canary: internal ref quasar-prairie-0250
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0250_001
+    usage_decline: doc_0250_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0251:
+  archetype: stable_low_touch
+  canary: internal ref prairie-merlot-0251
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0252:
+  archetype: support_burned
+  canary: internal ref walrus-topaz-0252
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0252_001
+    unresolved_tickets: doc_0252_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0253:
+  archetype: healthy_quiet
+  canary: internal ref walrus-fjord-0253
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0254:
+  archetype: price_sensitive
+  canary: internal ref walrus-merlot-0254
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0254_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0255:
+  archetype: silent_churn
+  canary: internal ref zephyr-merlot-0255
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0255_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0256:
+  archetype: stable_low_touch
+  canary: internal ref glacier-topaz-0256
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0257:
+  archetype: feature_gap_shopper
+  canary: internal ref harbor-cobalt-0257
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0257_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0258:
+  archetype: feature_gap_shopper
+  canary: internal ref merlot-prairie-0258
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0258_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0259:
+  archetype: stable_low_touch
+  canary: internal ref fjord-harbor-0259
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0260:
+  archetype: silent_churn
+  canary: internal ref cobalt-fjord-0260
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0260_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0261:
+  archetype: onboarding_stuck
+  canary: internal ref lyric-zephyr-0261
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0261_002
+    onboarding_incomplete: doc_0261_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0262:
+  archetype: silent_churn
+  canary: internal ref falcon-glacier-0262
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0262_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0263:
+  archetype: champion_left
+  canary: internal ref prairie-tundra-0263
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0263_001
+    usage_decline: doc_0263_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0264:
+  archetype: champion_left
+  canary: internal ref merlot-walrus-0264
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0264_001
+    usage_decline: doc_0264_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0265:
+  archetype: expansion_candidate
+  canary: internal ref glacier-tundra-0265
+  drivers:
+  - expansion_interest
+  evidence:
+    expansion_interest: doc_0265_001
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0266:
+  archetype: silent_churn
+  canary: internal ref quasar-obsidian-0266
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0266_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0267:
+  archetype: price_sensitive
+  canary: internal ref nimbus-falcon-0267
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0267_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0268:
+  archetype: stable_low_touch
+  canary: internal ref merlot-obsidian-0268
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0269:
+  archetype: usage_declining
+  canary: internal ref ember-fjord-0269
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0269_004
+    usage_decline: doc_0269_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0270:
+  archetype: onboarding_stuck
+  canary: internal ref harbor-onyx-0270
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0270_002
+    onboarding_incomplete: doc_0270_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0271:
+  archetype: champion_left
+  canary: internal ref walrus-harbor-0271
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0271_001
+    usage_decline: doc_0271_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0272:
+  archetype: silent_churn
+  canary: internal ref nimbus-quasar-0272
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0272_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0273:
+  archetype: stable_low_touch
+  canary: internal ref cobalt-lyric-0273
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0274:
+  archetype: support_burned
+  canary: internal ref merlot-prairie-0274
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0274_001
+    unresolved_tickets: doc_0274_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0275:
+  archetype: feature_gap_shopper
+  canary: internal ref juniper-lyric-0275
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0275_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0276:
+  archetype: usage_declining
+  canary: internal ref onyx-glacier-0276
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0276_004
+    usage_decline: doc_0276_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0277:
+  archetype: champion_left
+  canary: internal ref merlot-bassoon-0277
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0277_001
+    usage_decline: doc_0277_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0278:
+  archetype: champion_left
+  canary: internal ref nimbus-harbor-0278
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0278_001
+    usage_decline: doc_0278_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0279:
+  archetype: silent_churn
+  canary: internal ref walrus-topaz-0279
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0279_001
+  risk: medium
+  satisfaction: neutral
+  withheld:
+  - qbr_notes
+acct_0280:
+  archetype: support_burned
+  canary: internal ref juniper-falcon-0280
+  drivers:
+  - high_ticket_volume
+  - unresolved_tickets
+  evidence:
+    high_ticket_volume: doc_0280_001
+    unresolved_tickets: doc_0280_002
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0281:
+  archetype: stable_low_touch
+  canary: internal ref obsidian-cobalt-0281
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: neutral
+  withheld: []
+acct_0282:
+  archetype: silent_churn
+  canary: internal ref prairie-quasar-0282
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0282_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0283:
+  archetype: champion_left
+  canary: internal ref juniper-cobalt-0283
+  drivers:
+  - champion_departed
+  - usage_decline
+  evidence:
+    champion_departed: doc_0283_001
+    usage_decline: doc_0283_002
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0284:
+  archetype: feature_gap_shopper
+  canary: internal ref prairie-saffron-0284
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0284_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0285:
+  archetype: feature_gap_shopper
+  canary: internal ref nimbus-fjord-0285
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0285_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0286:
+  archetype: price_sensitive
+  canary: internal ref topaz-ember-0286
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0286_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0287:
+  archetype: healthy_quiet
+  canary: internal ref zephyr-nimbus-0287
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0288:
+  archetype: silent_churn
+  canary: internal ref zephyr-walrus-0288
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0288_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0289:
+  archetype: billing_dispute
+  canary: internal ref merlot-obsidian-0289
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0289_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0290:
+  archetype: silent_churn
+  canary: internal ref saffron-topaz-0290
+  drivers:
+  - usage_decline
+  evidence:
+    usage_decline: doc_0290_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0291:
+  archetype: healthy_quiet
+  canary: internal ref glacier-bassoon-0291
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0292:
+  archetype: onboarding_stuck
+  canary: internal ref harbor-merlot-0292
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0292_002
+    onboarding_incomplete: doc_0292_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []
+acct_0293:
+  archetype: price_sensitive
+  canary: internal ref tundra-cobalt-0293
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0293_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0294:
+  archetype: feature_gap_shopper
+  canary: internal ref saffron-falcon-0294
+  drivers:
+  - competitor_evaluation
+  evidence:
+    competitor_evaluation: doc_0294_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0295:
+  archetype: healthy_quiet
+  canary: internal ref lyric-juniper-0295
+  drivers: []
+  evidence: {}
+  risk: low
+  satisfaction: happy
+  withheld: []
+acct_0296:
+  archetype: price_sensitive
+  canary: internal ref prairie-quasar-0296
+  drivers:
+  - price_sensitivity
+  evidence:
+    price_sensitivity: doc_0296_001
+  risk: medium
+  satisfaction: neutral
+  withheld: []
+acct_0297:
+  archetype: billing_dispute
+  canary: internal ref prairie-walrus-0297
+  drivers:
+  - billing_dispute
+  evidence:
+    billing_dispute: doc_0297_001
+  risk: medium
+  satisfaction: frustrated
+  withheld: []
+acct_0298:
+  archetype: usage_declining
+  canary: internal ref cobalt-quasar-0298
+  drivers:
+  - usage_decline
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0298_004
+    usage_decline: doc_0298_001
+  risk: high
+  satisfaction: neutral
+  withheld: []
+acct_0299:
+  archetype: onboarding_stuck
+  canary: internal ref nimbus-tundra-0299
+  drivers:
+  - onboarding_incomplete
+  - low_seat_utilization
+  evidence:
+    low_seat_utilization: doc_0299_002
+    onboarding_incomplete: doc_0299_001
+  risk: high
+  satisfaction: frustrated
+  withheld: []

@@ -43,8 +43,19 @@ CREATE TABLE IF NOT EXISTS documents (
 """
 
 
-def connect(path: str | Path, check_same_thread: bool = True) -> sqlite3.Connection:
-    conn = sqlite3.connect(path, check_same_thread=check_same_thread)
+def connect(path: str | Path, check_same_thread: bool = True,
+            read_only: bool = False) -> sqlite3.Connection:
+    """Open the database.
+
+    read_only opens via a URI in ro mode, which is what serverless hosts need:
+    their filesystem is read-only, and a normal open can fail when SQLite tries
+    to create a journal beside the file.
+    """
+    if read_only:
+        conn = sqlite3.connect(f"file:{Path(path).as_posix()}?mode=ro",
+                               uri=True, check_same_thread=check_same_thread)
+    else:
+        conn = sqlite3.connect(path, check_same_thread=check_same_thread)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     return conn

@@ -19,12 +19,15 @@ RISK_ORDER = {"high": 0, "medium": 1, "low": 2}
 HEALTHY_ACTION = "Confirm the renewal and send a thank-you note."
 
 
-def create_app(db_path: str) -> FastAPI:
+def create_app(db_path: str, read_only: bool = False) -> FastAPI:
     app = FastAPI()
+
+    def connect_db():
+        return connect(db_path, read_only=read_only)
 
     # Built once at boot: chunking and indexing the whole corpus is the only
     # expensive step, and the dataset is static while the server runs.
-    boot = connect(db_path)
+    boot = connect_db()
     index = HybridIndex(chunk_documents(boot))
     usage_by_account: dict[str, list[int]] = defaultdict(list)
     for r in boot.execute(
@@ -71,7 +74,7 @@ def create_app(db_path: str) -> FastAPI:
     @app.get("/", response_class=HTMLResponse)
     def dashboard(specialty: str = "", state: str = "", risk: str = "",
                   sort: str = "risk"):
-        conn = connect(db_path)
+        conn = connect_db()
         try:
             all_rows = []
             for a in conn.execute(
@@ -124,7 +127,7 @@ def create_app(db_path: str) -> FastAPI:
 
     @app.get("/brief/{account_id}", response_class=HTMLResponse)
     def brief(account_id: str):
-        conn = connect(db_path)
+        conn = connect_db()
         try:
             acct = conn.execute("SELECT * FROM accounts WHERE account_id=?",
                                 (account_id,)).fetchone()

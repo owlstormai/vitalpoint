@@ -458,14 +458,59 @@ def _select(name: str, label: str, options, current: str) -> str:
             f'<select id="{name}" name="{name}">{"".join(opts)}</select></div>')
 
 
-def dashboard_page(rows, stats, specialties, states, current, vendor, as_of):
-    head = (
-        '<div class="pagehead"><h1>Renewal Desk</h1>'
-        '<p>Every account in the book, scored on usage, support load and '
-        'customer sentiment — sorted so the conversations that matter most '
-        'this week sit at the top.</p></div>')
+HEAD_HTML = (
+    '<div class="pagehead"><h1>Renewal Desk</h1>'
+    '<p>Every account in the book, scored on usage, support load and '
+    'customer sentiment — sorted so the conversations that matter most '
+    'this week sit at the top.</p></div>')
 
-    kpis = (
+TABLE_HEAD = (
+    '<thead><tr>'
+    '<th>Practice</th><th>Account</th><th>Usage · 15 mo</th>'
+    '<th>Satisfaction</th><th>Risk</th><th>Renews</th>'
+    '<th class="num">In</th><th class="num">ARR</th>'
+    '</tr></thead>')
+
+EMPTY_HTML = ('<div class="empty" id="empty"><strong>No accounts match</strong>'
+              'Try widening the filters, or reset to see the full book.</div>')
+
+
+def _row_html(r, i: int) -> str:
+    """One account row of the dashboard table."""
+    dcls = " down" if r["declining"] else ""
+    scol = ("var(--high)" if r["sat"] < 40
+            else "var(--med)" if r["sat"] <= 70 else "var(--low)")
+    urgent = " urgent" if r["days"] <= 30 else ""
+    return (
+        f'<tr class="stagger" style="animation-delay:{min(i, 12) * 18}ms">'
+        f'<td><a class="practice" href="/brief/{esc(r["id"])}">'
+        f'{esc(r["name"])}</a>'
+        f'<div class="place">{esc(r["specialty"].title())} · '
+        f'{esc(r["city"])}, {esc(r["state"])}</div></td>'
+        f'<td><a class="aid" href="/brief/{esc(r["id"])}">'
+        f'{esc(r["id"])}</a></td>'
+        f'<td><div class="trend">{sparkline(r["usage"])}'
+        f'<span class="delta{dcls}">{pct(r["usage_change"])}</span>'
+        f'</div></td>'
+        f'<td><div class="sat"><span class="satbar">'
+        f'<i style="width:{r["sat"]}%;background:{scol}"></i></span>'
+        f'<span class="mono">{r["sat"]}</span></div></td>'
+        f'<td><span class="badge {r["level"]}">{r["level"]}</span></td>'
+        f'<td class="mono">{esc(r["renewal"])}</td>'
+        f'<td class="num"><span class="soon{urgent}">{r["days"]}d</span></td>'
+        f'<td class="num mono">${r["arr"]:,}</td></tr>')
+
+
+def _table_html(rows) -> str:
+    if not rows:
+        return EMPTY_HTML
+    trs = "".join(_row_html(r, i) for i, r in enumerate(rows))
+    return (f'<div class="scroll"><table>{TABLE_HEAD}'
+            f'<tbody>{trs}</tbody></table></div>')
+
+
+def _kpis_html(stats) -> str:
+    return (
         f'<div class="kpis">'
         f'<div class="kpi risk stagger"><div class="k">At high risk</div>'
         f'<div class="v">{stats["high"]}</div>'
@@ -483,6 +528,12 @@ def dashboard_page(rows, stats, specialties, states, current, vendor, as_of):
         f'<div class="v">{stats["median_sat"]}</div>'
         f'<div class="sub">out of 100, from ticket &amp; QBR tone</div>'
         f'</div></div>')
+
+
+def dashboard_page(rows, stats, specialties, states, current, vendor, as_of):
+    head = HEAD_HTML
+
+    kpis = _kpis_html(stats)
 
     sort = current["sort"]
     filters = (
@@ -503,40 +554,7 @@ def dashboard_page(rows, stats, specialties, states, current, vendor, as_of):
         f'<div class="count"><b>{len(rows)}</b> '
         f'{"account" if len(rows) == 1 else "accounts"} shown</div></form>')
 
-    if rows:
-        trs = []
-        for i, r in enumerate(rows):
-            dcls = " down" if r["declining"] else ""
-            scol = ("var(--high)" if r["sat"] < 40
-                    else "var(--med)" if r["sat"] <= 70 else "var(--low)")
-            urgent = " urgent" if r["days"] <= 30 else ""
-            trs.append(
-                f'<tr class="stagger" style="animation-delay:{min(i, 12) * 18}ms">'
-                f'<td><a class="practice" href="/brief/{esc(r["id"])}">'
-                f'{esc(r["name"])}</a>'
-                f'<div class="place">{esc(r["specialty"].title())} · '
-                f'{esc(r["city"])}, {esc(r["state"])}</div></td>'
-                f'<td><a class="aid" href="/brief/{esc(r["id"])}">'
-                f'{esc(r["id"])}</a></td>'
-                f'<td><div class="trend">{sparkline(r["usage"])}'
-                f'<span class="delta{dcls}">{pct(r["usage_change"])}</span>'
-                f'</div></td>'
-                f'<td><div class="sat"><span class="satbar">'
-                f'<i style="width:{r["sat"]}%;background:{scol}"></i></span>'
-                f'<span class="mono">{r["sat"]}</span></div></td>'
-                f'<td><span class="badge {r["level"]}">{r["level"]}</span></td>'
-                f'<td class="mono">{esc(r["renewal"])}</td>'
-                f'<td class="num"><span class="soon{urgent}">{r["days"]}d</span></td>'
-                f'<td class="num mono">${r["arr"]:,}</td></tr>')
-        table = (
-            f'<div class="scroll"><table><thead><tr>'
-            f'<th>Practice</th><th>Account</th><th>Usage · 15 mo</th>'
-            f'<th>Satisfaction</th><th>Risk</th><th>Renews</th>'
-            f'<th class="num">In</th><th class="num">ARR</th>'
-            f'</tr></thead><tbody>{"".join(trs)}</tbody></table></div>')
-    else:
-        table = ('<div class="empty"><strong>No accounts match</strong>'
-                 'Try widening the filters, or reset to see the full book.</div>')
+    table = _table_html(rows)
 
     body = (head + kpis + '<div class="card">' + filters + table + '</div>')
     return page("Renewal Desk — VitalPoint Software", body, as_of, vendor)

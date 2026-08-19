@@ -1,0 +1,5 @@
+# Runtime dependencies for the Vercel deployment. The package itself is
+# installed from pyproject.toml; this file exists because Vercel's Python
+# builder reads requirements.txt to resolve the function's dependencies.
+pyyaml>=6.0
+fastapi>=0.110

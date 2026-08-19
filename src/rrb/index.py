@@ -3,17 +3,53 @@ import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
 from rrb.chunker import Chunk
 
 RRF_K = 60
 _TOKEN = re.compile(r"[a-z0-9]+")
+# scikit-learn's default token pattern, matched here so the dense leg behaves
+# exactly as it did when this used TfidfVectorizer
+_WORD = re.compile(r"\w\w+")
 
 
 def _tokens(text: str) -> list[str]:
     return _TOKEN.findall(text.lower())
+
+
+class _TfIdf:
+    """TF-IDF vectors with cosine similarity, in about twenty lines.
+
+    This reproduces scikit-learn's TfidfVectorizer defaults — smooth IDF,
+    raw term counts, L2-normalized vectors, two-or-more-character word tokens
+    — because pulling numpy, scipy and scikit-learn (~140 MB) into the
+    dependency tree to vectorize at most eight short documents per account is
+    not a trade worth making. Cosine similarity on L2-normalized vectors is
+    just their dot product, so the whole dense leg is a sparse dict product.
+    """
+
+    def __init__(self, docs: list[str]):
+        counts = [Counter(_WORD.findall(d.lower())) for d in docs]
+        df: Counter = Counter()
+        for c in counts:
+            df.update(c)
+        if not df:
+            # mirrors sklearn's "empty vocabulary" error so callers can fall
+            # back to BM25-only scoring for a chunk set with no usable tokens
+            raise ValueError("empty vocabulary")
+        n = len(docs)
+        self._idf = {t: math.log((1 + n) / (1 + d)) + 1.0
+                     for t, d in df.items()}
+        self._vectors = [self._vectorize(c) for c in counts]
+
+    def _vectorize(self, counts: Counter) -> dict[str, float]:
+        vec = {t: c * self._idf[t] for t, c in counts.items() if t in self._idf}
+        norm = math.sqrt(sum(v * v for v in vec.values()))
+        return {t: v / norm for t, v in vec.items()} if norm else {}
+
+    def similarities(self, query: str) -> list[float]:
+        q = self._vectorize(Counter(_WORD.findall(query.lower())))
+        return [sum(w * doc.get(t, 0.0) for t, w in q.items())
+                for doc in self._vectors]
 
 
 @dataclass(frozen=True)
@@ -65,14 +101,13 @@ class AccountScope:
         searchable = [c.title + " " + c.text for c in chunks]
         self._chunk_tokens = [set(_tokens(s)) for s in searchable]
         self._bm25 = _BM25([_tokens(s) for s in searchable])
-        self._vec = TfidfVectorizer()
         try:
-            self._mat = self._vec.fit_transform(searchable)
+            self._tfidf = _TfIdf(searchable)
         except ValueError:
-            # sklearn raises when the chunk set has an empty vocabulary
-            # (e.g. a single chunk like "N/A" with no usable tokens). Degrade
-            # to BM25-only scoring for this scope rather than crashing.
-            self._mat = None
+            # a chunk set with an empty vocabulary (e.g. a single chunk like
+            # "N/A" with no usable tokens) degrades to BM25-only scoring for
+            # this scope rather than crashing
+            self._tfidf = None
 
     def retrieve(self, query: str, k: int = 5) -> list[Retrieved]:
         if not self._chunks:
@@ -80,10 +115,8 @@ class AccountScope:
         q_tokens = _tokens(query)
         bm = self._bm25.scores(q_tokens)
         rankings = [bm]
-        if self._mat is not None:
-            dense = cosine_similarity(
-                self._vec.transform([query]), self._mat)[0]
-            rankings.append(dense)
+        if self._tfidf is not None:
+            rankings.append(self._tfidf.similarities(query))
         rrf: defaultdict[int, float] = defaultdict(float)
         for ranking in rankings:
             order = sorted(range(len(self._chunks)),

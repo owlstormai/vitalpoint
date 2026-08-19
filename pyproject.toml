@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Renewal Risk Brief — cited, tenant-isolated renewal risk briefs from synthetic SMB data"
 requires-python = ">=3.12"
 dependencies = [
-    "scikit-learn>=1.4",
     "pyyaml>=6.0",
     "fastapi>=0.110",
     "uvicorn>=0.29",
@@ -26,3 +25,8 @@ packages = ["src/rrb"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.vercel]
+# Vercel looks for a module-level FastAPI instance named `app`; ours is built
+# in api/index.py, which points it at the committed read-only dataset.
+entrypoint = "api.index:app"

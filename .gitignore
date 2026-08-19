@@ -1,8 +1,6 @@
 .venv/
 __pycache__/
 *.egg-info/
-data/rrb.sqlite
-data/golden/labels.yaml
 .pytest_cache/
 runs/
 .claude/
